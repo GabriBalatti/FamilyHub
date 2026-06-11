@@ -9,8 +9,8 @@ export default defineConfig({
       registerType: 'autoUpdate',
       includeAssets: ['favicon.ico', 'icon-192.png', 'icon-512.png'],
       manifest: {
-        name: 'Famiglia App',
-        short_name: 'Famiglia',
+        name: 'FamilyHub',
+        short_name: 'Family',
         description: 'Organizza faccende, spesa e appuntamenti di famiglia',
         theme_color: '#6366f1',
         background_color: '#ffffff',

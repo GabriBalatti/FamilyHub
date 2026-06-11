@@ -1,4 +1,4 @@
-# 👨‍👩‍👧‍👦 Famiglia App
+# 👨‍👩‍👧‍👦 FamilyHub
 
 PWA per organizzare faccende domestiche, lista della spesa e appuntamenti familiari, con sincronizzazione in tempo reale tra tutti i dispositivi della famiglia.
 
@@ -11,7 +11,7 @@ PWA per organizzare faccende domestiche, lista della spesa e appuntamenti famili
 ## Struttura del progetto
 
 ```
-famiglia-app/
+FamilyHub/
 ├── supabase/
 │   └── schema.sql          # Schema DB completo (tabelle + sicurezza + realtime)
 ├── src/
@@ -54,7 +54,7 @@ famiglia-app/
 
 ### 2. Configura il progetto locale
 ```bash
-cd famiglia-app
+cd FamilyHub
 npm install
 cp .env.example .env
 ```

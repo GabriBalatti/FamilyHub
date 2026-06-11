@@ -26,7 +26,7 @@ export default function Login() {
 
   return (
     <div className="auth-container">
-      <h1>👨‍👩‍👧‍👦 Famiglia App</h1>
+      <h1>👨‍👩‍👧‍👦 FamilyHub</h1>
       <form onSubmit={handleSubmit} className="auth-form">
         <input
           type="email"
