@@ -92,38 +92,48 @@ export default function Calendario() {
       <h2>📅 Appuntamenti</h2>
 
       <form onSubmit={aggiungi} className="form-rapido form-colonna">
-        <input
-          type="text"
-          placeholder="Es. Visita dal dentista"
-          value={titolo}
-          onChange={(e) => setTitolo(e.target.value)}
-        />
         <label className="campo-label">
-          Data e ora
+          Titolo*
+          <input
+            type="text"
+            placeholder="Visita dal dentista..."
+            value={titolo}
+            onChange={(e) => setTitolo(e.target.value)}
+          />
+        </label>
+        <label className="campo-label">
+          Data e ora*
           <input
             type="datetime-local"
             value={dataInizio}
             onChange={(e) => setDataInizio(e.target.value)}
           />
         </label>
-        <input
-          type="text"
-          placeholder="Luogo (opzionale)"
-          value={luogo}
-          onChange={(e) => setLuogo(e.target.value)}
-        />
-        <div className="selettore-membri">
-          {membri.map((m) => (
-            <label key={m.id} className="chip">
-              <input
-                type="checkbox"
-                checked={partecipanti.includes(m.id)}
-                onChange={() => togglePartecipante(m.id)}
-              />
-              {m.nome}
-            </label>
-          ))}
-        </div>
+        <label className="campo-label">
+          Luogo
+          <input
+            type="text"
+            placeholder="Gordona..."
+            value={luogo}
+            onChange={(e) => setLuogo(e.target.value)}
+          />
+        </label>
+        <label className="campo-label">
+          Partecipanti
+          <div className="selettore-membri">
+            {membri.map((m) => (
+              <label key={m.id} className="chip">
+                <input
+                  type="checkbox"
+                  checked={partecipanti.includes(m.id)}
+                  onChange={() => togglePartecipante(m.id)}
+                />
+                {m.nome}
+              </label>
+            ))}
+          </div>
+        </label>
+        <br />
         <button type="submit">Aggiungi appuntamento</button>
       </form>
 
