@@ -98,20 +98,27 @@ export default function Spesa() {
     <div className="pagina">
       <h2>🛒 Lista della spesa</h2>
 
-      <form onSubmit={aggiungi} className="form-rapido">
-        <input
-          type="text"
-          placeholder="Cosa serve?"
-          value={nome}
-          onChange={(e) => setNome(e.target.value)}
-        />
-        <input
-          type="text"
-          placeholder="Quantità (es. 2kg)"
-          value={quantita}
-          onChange={(e) => setQuantita(e.target.value)}
-          className="input-piccolo"
-        />
+      <form onSubmit={aggiungi} className="form-rapido form-colonna">
+        <label className="campo-label">
+          Cosa serve?*
+          <input
+            type="text"
+            placeholder="Pane..."
+            value={nome}
+            onChange={(e) => setNome(e.target.value)}
+          />
+        </label>
+        <label className="campo-label">
+          Quantità
+          <input
+            type="text"
+            placeholder="2 kg..."
+            value={quantita}
+            onChange={(e) => setQuantita(e.target.value)}
+            className="input-piccolo"
+          />
+        </label>
+        <br />
         <button type="submit">Aggiungi</button>
       </form>
 

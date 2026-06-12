@@ -76,24 +76,52 @@ export default function Faccende() {
     <div className="pagina">
       <h2>🧹 Faccende domestiche</h2>
 
-      <form onSubmit={aggiungiFaccenda} className="form-rapido">
-        <input
-          type="text"
-          placeholder="Cosa c'è da fare?"
-          value={titolo}
-          onChange={(e) => setTitolo(e.target.value)}
-        />
-        <select value={assegnatoA} onChange={(e) => setAssegnatoA(e.target.value)}>
-          <option value="">Chi se ne occupa?</option>
-          {membri.map((m) => (
-            <option key={m.id} value={m.id}>{m.nome}</option>
-          ))}
-        </select>
-        <input
-          type="date"
-          value={scadenza}
-          onChange={(e) => setScadenza(e.target.value)}
-        />
+      <form onSubmit={aggiungiFaccenda} className="form-rapido form-colonna">
+        <label className="campo-label">
+          Cosa c'è da fare?
+          <input
+            type="text"
+            placeholder="Svuotare lavastoviglie..."
+            value={titolo}
+            onChange={(e) => setTitolo(e.target.value)}
+          />
+        </label>
+        <label className="campo-label">
+          Scadenza
+          <input
+            type="date"
+            value={scadenza}
+            onChange={(e) => setScadenza(e.target.value)}
+          />
+        </label>
+        <label className="campo-label">
+          Chi se ne occupa?
+          <div className="selettore-membri">
+            <label className="chip">
+              <input
+                type="radio"
+                name="assegnatoA"
+                value=""
+                checked={assegnatoA === ""}
+                onChange={(e) => setAssegnatoA(e.target.value)}
+              />
+              Nessuno
+            </label>
+            {membri.map((m) => (
+              <label key={m.id} className="chip">
+                <input
+                  type="radio"
+                  name="assegnatoA"
+                  value={m.id}
+                  checked={assegnatoA === m.id}
+                  onChange={() => setAssegnatoA(m.id)}
+                />
+                {m.nome}
+              </label>
+            ))}
+          </div>
+        </label>
+        <br />
         <button type="submit">Aggiungi</button>
       </form>
 
