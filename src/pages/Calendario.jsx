@@ -98,11 +98,14 @@ export default function Calendario() {
           value={titolo}
           onChange={(e) => setTitolo(e.target.value)}
         />
-        <input
-          type="datetime-local"
-          value={dataInizio}
-          onChange={(e) => setDataInizio(e.target.value)}
-        />
+        <label className="campo-label">
+          Data e ora
+          <input
+            type="datetime-local"
+            value={dataInizio}
+            onChange={(e) => setDataInizio(e.target.value)}
+          />
+        </label>
         <input
           type="text"
           placeholder="Luogo (opzionale)"
