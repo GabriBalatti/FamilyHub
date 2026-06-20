@@ -1,6 +1,19 @@
 import { useState } from 'react';
 import { supabase } from '../lib/supabase';
 
+function traduciErrore(message) {
+  const errori = {
+    'Invalid login credentials': 'Email o password errati',
+    'Email not confirmed': 'Email non ancora confermata. Controlla la tua casella di posta',
+    'User already registered': 'Esiste già un account con questa email',
+    'Password should be at least 6 characters': 'La password deve essere di almeno 6 caratteri',
+    'Unable to validate email address: invalid format': 'Formato email non valido',
+    'Email rate limit exceeded': 'Troppi tentativi. Riprova tra qualche minuto',
+    'User not found': 'Nessun account trovato con questa email',
+  };
+  return errori[message] || `Errore: ${message}`;
+}
+
 export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -15,11 +28,11 @@ export default function Login() {
 
     if (modalita === 'login') {
       const { error } = await supabase.auth.signInWithPassword({ email, password });
-      if (error) setErrore(error.message);
+      if (error) setErrore(traduciErrore(error.message));
     } else {
       const { error } = await supabase.auth.signUp({ email, password });
-      if (error) setErrore(error.message);
-      else setErrore('Registrazione ok! Controlla la mail per confermare, poi accedi.');
+      if (error) setErrore(traduciErrore(error.message));
+      else setErrore('Registrazione completata! Controlla la mail per confermare, poi accedi.');
     }
     setCaricamento(false);
   }
