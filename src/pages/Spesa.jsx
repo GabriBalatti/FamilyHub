@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../lib/AuthContext';
+import { Trash2 } from 'lucide-react';
 
 export default function Spesa() {
   const { profilo } = useAuth();
@@ -31,7 +32,6 @@ export default function Spesa() {
   }, [listaId]);
 
   async function init() {
-    // Cerca la lista spesa principale, altrimenti la crea
     let { data: liste } = await supabase
       .from('liste_spesa')
       .select('id')
@@ -96,7 +96,7 @@ export default function Spesa() {
 
   return (
     <div className="pagina">
-      <h2>🛒 Lista della spesa</h2>
+      <h2>Lista della spesa</h2>
 
       <form onSubmit={aggiungi} className="form-rapido form-colonna">
         <label className="campo-label">
@@ -134,10 +134,12 @@ export default function Spesa() {
               <span className="titolo">{el.nome}</span>
               {el.quantita && <span className="meta">{el.quantita}</span>}
             </div>
-            <button className="elimina" onClick={() => elimina(el.id)}>✕</button>
+            <button className="elimina" onClick={() => elimina(el.id)}>
+              <Trash2 size={16} />
+            </button>
           </li>
         ))}
-        {elementi.length === 0 && <p className="vuoto">Lista vuota. Aggiungi qualcosa! 🛍️</p>}
+        {elementi.length === 0 && <p className="vuoto">Lista vuota. Aggiungi qualcosa!</p>}
       </ul>
 
       {elementi.some((el) => el.comprato) && (

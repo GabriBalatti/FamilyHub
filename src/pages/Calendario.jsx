@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../lib/AuthContext';
+import { Trash2, Clock, MapPin, Users } from 'lucide-react';
 
 export default function Calendario() {
   const { profilo } = useAuth();
@@ -91,7 +92,7 @@ export default function Calendario() {
 
   return (
     <div className="pagina">
-      <h2>📅 Appuntamenti</h2>
+      <h2>Appuntamenti</h2>
 
       <form onSubmit={aggiungi} className="form-rapido form-colonna">
         <label className="campo-label">
@@ -145,16 +146,27 @@ export default function Calendario() {
             <div className="contenuto">
               <span className="titolo">{a.titolo}</span>
               <div className="meta">
-                <span className="data">🕐 {formattaData(a.data_inizio)}</span>
-                {a.luogo && <span>📍 {a.luogo}</span>}
+                <span className="data">
+                  <Clock size={13} style={{ display: 'inline', verticalAlign: 'middle', marginRight: 3 }} />
+                  {formattaData(a.data_inizio)}
+                </span>
+                {a.luogo && (
+                  <span>
+                    <MapPin size={13} style={{ display: 'inline', verticalAlign: 'middle', marginRight: 3 }} />
+                    {a.luogo}
+                  </span>
+                )}
               </div>
               {a.partecipanti?.length > 0 && (
                 <div className="meta">
-                  👥 {a.partecipanti.map(getNomeMembro).join(', ')}
+                  <Users size={13} style={{ display: 'inline', verticalAlign: 'middle', marginRight: 3 }} />
+                  {a.partecipanti.map(getNomeMembro).join(', ')}
                 </div>
               )}
             </div>
-            <button className="elimina" onClick={() => elimina(a.id)}>✕</button>
+            <button className="elimina" onClick={() => elimina(a.id)}>
+              <Trash2 size={16} />
+            </button>
           </li>
         ))}
         {appuntamenti.length === 0 && <p className="vuoto">Nessun appuntamento in programma</p>}

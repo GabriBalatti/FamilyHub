@@ -1,19 +1,24 @@
 import { NavLink } from 'react-router-dom';
+import { Brush, ShoppingCart, Calendar, User } from 'lucide-react';
 
 export default function NavBar() {
   return (
     <nav className="navbar">
       <NavLink to="/faccende" className={({ isActive }) => isActive ? 'attivo' : ''}>
-        🧹<span>Faccende</span>
+        <Brush size={22} />
+        <span>Faccende</span>
       </NavLink>
       <NavLink to="/spesa" className={({ isActive }) => isActive ? 'attivo' : ''}>
-        🛒<span>Spesa</span>
+        <ShoppingCart size={22} />
+        <span>Spesa</span>
       </NavLink>
       <NavLink to="/calendario" className={({ isActive }) => isActive ? 'attivo' : ''}>
-        📅<span>Calendario</span>
+        <Calendar size={22} />
+        <span>Calendario</span>
       </NavLink>
       <NavLink to="/profilo" className={({ isActive }) => isActive ? 'attivo' : ''}>
-        👤<span>Profilo</span>
+        <User size={22} />
+        <span>Profilo</span>
       </NavLink>
     </nav>
   );

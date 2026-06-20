@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../lib/AuthContext';
+import { Trash2, CalendarDays } from 'lucide-react';
 
 export default function Faccende() {
   const { profilo } = useAuth();
@@ -14,7 +15,6 @@ export default function Faccende() {
     caricaFaccende();
     caricaMembri();
 
-    // Realtime: aggiorna in automatico quando qualcuno modifica
     const canale = supabase
       .channel('faccende-canale')
       .on(
@@ -74,7 +74,7 @@ export default function Faccende() {
 
   return (
     <div className="pagina">
-      <h2>🧹 Faccende domestiche</h2>
+      <h2>Faccende domestiche</h2>
 
       <form onSubmit={aggiungiFaccenda} className="form-rapido form-colonna">
         <label className="campo-label">
@@ -141,13 +141,20 @@ export default function Faccende() {
                     {f.profili.nome}
                   </span>
                 )}
-                {f.scadenza && <span className="data">📅 {f.scadenza}</span>}
+                {f.scadenza && (
+                  <span className="data">
+                    <CalendarDays size={13} style={{ display: 'inline', verticalAlign: 'middle', marginRight: 3 }} />
+                    {f.scadenza}
+                  </span>
+                )}
               </div>
             </div>
-            <button className="elimina" onClick={() => elimina(f.id)}>✕</button>
+            <button className="elimina" onClick={() => elimina(f.id)}>
+              <Trash2 size={16} />
+            </button>
           </li>
         ))}
-        {faccende.length === 0 && <p className="vuoto">Nessuna faccenda. Tutto fatto! 🎉</p>}
+        {faccende.length === 0 && <p className="vuoto">Nessuna faccenda. Tutto fatto!</p>}
       </ul>
     </div>
   );
