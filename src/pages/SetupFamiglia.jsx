@@ -39,7 +39,7 @@ export default function SetupFamiglia() {
     const { data: famiglia, error: erroreRicerca } = await supabase
       .from('famiglie')
       .select('id')
-      .eq('codice_invito', codiceInvito.trim())
+      .eq('codice_invito', codiceInvito.trim().toLowerCase())
       .single();
 
     if (erroreRicerca || !famiglia) {
@@ -109,7 +109,8 @@ export default function SetupFamiglia() {
             type="text"
             placeholder="Codice invito"
             value={codiceInvito}
-            onChange={(e) => setCodiceInvito(e.target.value)}
+            onChange={(e) => setCodiceInvito(e.target.value.toLowerCase())}
+            style={{ textTransform: 'lowercase' }}
             required
           />
         )}

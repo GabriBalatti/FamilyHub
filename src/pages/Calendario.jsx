@@ -48,10 +48,12 @@ export default function Calendario() {
     e.preventDefault();
     if (!titolo.trim() || !dataInizio) return;
 
+    const dataLocale = new Date(dataInizio);
+
     await supabase.from('appuntamenti').insert({
       famiglia_id: profilo.famiglia_id,
       titolo,
-      data_inizio: dataInizio,
+      data_inizio: dataLocale.toISOString(),
       luogo: luogo || null,
       partecipanti,
       created_by: profilo.id
