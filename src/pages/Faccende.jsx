@@ -74,6 +74,11 @@ export default function Faccende() {
     await supabase.from('faccende').delete().eq('id', id);
   }
 
+  function formattaScadenza(dataIso) {
+    const [anno, mese, giorno] = dataIso.split('-');
+    return `${giorno}/${mese}/${anno}`;
+  }
+
   return (
     <div className="pagina">
       <h2><IconFaccende width={22} height={22} /> Faccende domestiche</h2>
@@ -146,7 +151,7 @@ export default function Faccende() {
                 {f.scadenza && (
                   <span className="data">
                     <CalendarDays size={13} style={{ display: 'inline', verticalAlign: 'middle', marginRight: 3 }} />
-                    {f.scadenza}
+                    {formattaScadenza(f.scadenza)}
                   </span>
                 )}
               </div>

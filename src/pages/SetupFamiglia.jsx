@@ -78,7 +78,7 @@ export default function SetupFamiglia() {
           className={modalita === 'crea' ? 'tab active' : 'tab'}
           onClick={() => setModalita('crea')}
         >
-          Crea famiglia
+          Crea una famiglia
         </button>
         <button
           className={modalita === 'entra' ? 'tab active' : 'tab'}
@@ -89,31 +89,40 @@ export default function SetupFamiglia() {
       </div>
 
       <form onSubmit={modalita === 'crea' ? creaFamiglia : entraInFamiglia} className="auth-form">
-        <input
-          type="text"
-          placeholder="Il tuo nome"
-          value={nome}
-          onChange={(e) => setNome(e.target.value)}
-          required
-        />
-
-        {modalita === 'crea' ? (
+        <label className="campo-label">
+          Nome
           <input
             type="text"
-            placeholder="Nome famiglia (es. Famiglia Rossi)"
+            placeholder="Gabri..."
+            value={nome}
+            onChange={(e) => setNome(e.target.value)}
+            required
+          />
+        </label>
+
+        {modalita === 'crea' ? (
+          <label className="campo-label">
+          Nome famiglia
+          <input
+            type="text"
+            placeholder="Famiglia Balatti..."
             value={nomeFamiglia}
             onChange={(e) => setNomeFamiglia(e.target.value)}
             required
           />
+          </label>
         ) : (
+          <label className="campo-label">
+          Codice invito
           <input
             type="text"
-            placeholder="Codice invito"
+            placeholder="xx000xx0..."
             value={codiceInvito}
             onChange={(e) => setCodiceInvito(e.target.value.toLowerCase())}
             style={{ textTransform: 'lowercase' }}
             required
           />
+          </label>
         )}
 
         {errore && <p className="errore">{errore}</p>}

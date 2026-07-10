@@ -216,6 +216,7 @@ button:active {
 }
 
 .campo-label {
+  text-align: left;
   display: flex;
   flex-direction: column;
   gap: 6px;
