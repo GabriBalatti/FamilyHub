@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../lib/AuthContext';
 import { Trash2, CalendarDays } from 'lucide-react';
+import IconFaccende from '../assets/icons/faccende.svg?react';
+import IconFesta from '../assets/icons/festa.svg?react';
 
 export default function Faccende() {
   const { profilo } = useAuth();
@@ -74,7 +76,7 @@ export default function Faccende() {
 
   return (
     <div className="pagina">
-      <h2>Faccende domestiche</h2>
+      <h2><IconFaccende width={22} height={22} /> Faccende domestiche</h2>
 
       <form onSubmit={aggiungiFaccenda} className="form-rapido form-colonna">
         <label className="campo-label">
@@ -154,7 +156,7 @@ export default function Faccende() {
             </button>
           </li>
         ))}
-        {faccende.length === 0 && <p className="vuoto">Nessuna faccenda. Tutto fatto!</p>}
+        {faccende.length === 0 && <p className="vuoto">Nessuna faccenda. Tutto fatto! <IconFesta width={20} height={20} /></p>}
       </ul>
     </div>
   );

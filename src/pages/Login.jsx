@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { supabase } from '../lib/supabase';
+import IconLogo from '../assets/icons/famiglia.svg?react';
 
 function traduciErrore(message) {
   const errori = {
@@ -38,8 +39,8 @@ export default function Login() {
   }
 
   return (
-    <div className="auth-container">
-      <h1>👨‍👩‍👧‍👦 FamilyHub</h1>
+    <div className="auth-container"><IconLogo width={64} height={64} />
+      <h1>FamilyHub</h1>
       <form onSubmit={handleSubmit} className="auth-form">
         <input
           type="email"

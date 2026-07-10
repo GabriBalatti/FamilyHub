@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../lib/AuthContext';
 import { Trash2 } from 'lucide-react';
+import IconSpesa from '../assets/icons/spesa.svg?react';
+import IconShopping from '../assets/icons/shopping.svg?react';
 
 export default function Spesa() {
   const { profilo } = useAuth();
@@ -96,7 +98,7 @@ export default function Spesa() {
 
   return (
     <div className="pagina">
-      <h2>Lista della spesa</h2>
+      <h2><IconSpesa width={22} height={22} /> Faccende domestiche</h2>
 
       <form onSubmit={aggiungi} className="form-rapido form-colonna">
         <label className="campo-label">
@@ -139,7 +141,7 @@ export default function Spesa() {
             </button>
           </li>
         ))}
-        {elementi.length === 0 && <p className="vuoto">Lista vuota. Aggiungi qualcosa!</p>}
+        {elementi.length === 0 && <p className="vuoto">Lista vuota. Aggiungi qualcosa! <IconShopping width={20} height={20} /></p>}
       </ul>
 
       {elementi.some((el) => el.comprato) && (

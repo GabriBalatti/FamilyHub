@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../lib/AuthContext';
 import { Trash2, Clock, MapPin, Users } from 'lucide-react';
+import IconCalendario from '../assets/icons/calendario.svg?react';
 
 export default function Calendario() {
   const { profilo } = useAuth();
@@ -92,7 +93,7 @@ export default function Calendario() {
 
   return (
     <div className="pagina">
-      <h2>Appuntamenti</h2>
+      <h2><IconCalendario width={22} height={22} /> Appuntamenti</h2>
 
       <form onSubmit={aggiungi} className="form-rapido form-colonna">
         <label className="campo-label">
