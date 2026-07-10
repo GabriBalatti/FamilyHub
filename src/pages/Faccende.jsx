@@ -80,7 +80,7 @@ export default function Faccende() {
 
       <form onSubmit={aggiungiFaccenda} className="form-rapido form-colonna">
         <label className="campo-label">
-          Cosa c'è da fare?
+          Cosa c'è da fare?*
           <input
             type="text"
             placeholder="Svuotare lavastoviglie..."
