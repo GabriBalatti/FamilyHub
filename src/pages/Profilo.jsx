@@ -1,6 +1,7 @@
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../lib/AuthContext';
 import { LogOut } from 'lucide-react';
+import { APP_VERSION } from '../lib/version';
 
 export default function Profilo() {
   const { profilo } = useAuth();
@@ -25,6 +26,7 @@ export default function Profilo() {
         <LogOut size={16} style={{ display: 'inline', verticalAlign: 'middle', marginRight: 6 }} />
         Esci
       </button>
+      <p className="versione-app">v{APP_VERSION}</p>
     </div>
   );
 }

@@ -343,3 +343,11 @@ button:disabled {
   height: 100vh;
   color: #94a3b8;
 }
+
+.versione-app {
+  display: block;
+  text-align: center;
+  font-size: 12px;
+  color: #94a3b8;
+  margin-top: 24px;
+}

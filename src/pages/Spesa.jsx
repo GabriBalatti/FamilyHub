@@ -98,7 +98,7 @@ export default function Spesa() {
 
   return (
     <div className="pagina">
-      <h2><IconSpesa width={22} height={22} /> Faccende domestiche</h2>
+      <h2><IconSpesa width={22} height={22} /> Lista della spesa</h2>
 
       <form onSubmit={aggiungi} className="form-rapido form-colonna">
         <label className="campo-label">
