@@ -12,6 +12,7 @@
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+  -webkit-tap-highlight-color: transparent;
 }
 
 body {
@@ -117,7 +118,9 @@ body {
 }
 
 /* ===== Form elements ===== */
-input, select, button {
+input,
+select,
+button {
   font-size: 16px;
   padding: 12px;
   border-radius: 8px;
@@ -132,6 +135,9 @@ button {
   font-weight: 600;
   cursor: pointer;
   transition: background 0.15s;
+  touch-action: manipulation;
+  will-change: transform;
+  transition: transform 0.15s cubic-bezier(0.2, 0, 0, 1)
 }
 
 button:hover {
@@ -141,6 +147,10 @@ button:hover {
 button:disabled {
   opacity: 0.6;
   cursor: not-allowed;
+}
+
+button:active {
+  transform: scale(0.98);
 }
 
 .bottone-secondario {

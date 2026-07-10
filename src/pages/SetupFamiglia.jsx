@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../lib/AuthContext';
+import IconSaluto from '../assets/icons/saluto.svg?react';
 
 export default function SetupFamiglia() {
   const { session, ricaricaProfilo } = useAuth();
@@ -69,8 +70,8 @@ export default function SetupFamiglia() {
 
   return (
     <div className="auth-container">
-      <h1>Benvenuto! 👋</h1>
-      <p>Prima di iniziare, configura il tuo profilo familiare.</p>
+      <h1>Benvenuto! <IconSaluto width={40} height={40} /></h1>
+      <p>Prima di iniziare, configura il tuo profilo entrando in una famiglia o creandone una nuova.</p>
 
       <div className="tabs">
         <button
