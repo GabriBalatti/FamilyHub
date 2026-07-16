@@ -7,12 +7,19 @@ import Spesa from './pages/Spesa';
 import Calendario from './pages/Calendario';
 import Profilo from './pages/Profilo';
 import NavBar from './components/NavBar';
+import { APP_VERSION } from './lib/version';
 
 function AppContenuto() {
   const { session, profilo, loading } = useAuth();
 
   if (loading) {
-    return <div className="caricamento-pagina">Caricamento...</div>;
+    return (
+      <div className="caricamento-pagina">
+        <p>Caricamento...
+          <span className="versione-app">v{APP_VERSION}</span>
+        </p>
+      </div>
+    );
   }
 
   if (!session) {

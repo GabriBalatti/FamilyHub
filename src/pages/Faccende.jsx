@@ -1,6 +1,9 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../lib/AuthContext';
+import { Trash2, CalendarDays } from 'lucide-react';
+import IconFaccende from '../assets/icons/faccende.svg?react';
+import IconFesta from '../assets/icons/festa.svg?react';
 
 export default function Faccende() {
   const { profilo } = useAuth();
@@ -14,7 +17,6 @@ export default function Faccende() {
     caricaFaccende();
     caricaMembri();
 
-    // Realtime: aggiorna in automatico quando qualcuno modifica
     const canale = supabase
       .channel('faccende-canale')
       .on(
@@ -72,13 +74,18 @@ export default function Faccende() {
     await supabase.from('faccende').delete().eq('id', id);
   }
 
+  function formattaScadenza(dataIso) {
+    const [anno, mese, giorno] = dataIso.split('-');
+    return `${giorno}/${mese}/${anno}`;
+  }
+
   return (
     <div className="pagina">
-      <h2>🧹 Faccende domestiche</h2>
+      <h2><IconFaccende width={22} height={22} /> Faccende domestiche</h2>
 
       <form onSubmit={aggiungiFaccenda} className="form-rapido form-colonna">
         <label className="campo-label">
-          Cosa c'è da fare?
+          Cosa c'è da fare?*
           <input
             type="text"
             placeholder="Svuotare lavastoviglie..."
@@ -141,13 +148,20 @@ export default function Faccende() {
                     {f.profili.nome}
                   </span>
                 )}
-                {f.scadenza && <span className="data">📅 {f.scadenza}</span>}
+                {f.scadenza && (
+                  <span className="data">
+                    <CalendarDays size={13} style={{ display: 'inline', verticalAlign: 'middle', marginRight: 3 }} />
+                    {formattaScadenza(f.scadenza)}
+                  </span>
+                )}
               </div>
             </div>
-            <button className="elimina" onClick={() => elimina(f.id)}>✕</button>
+            <button className="elimina" onClick={() => elimina(f.id)}>
+              <Trash2 size={16} />
+            </button>
           </li>
         ))}
-        {faccende.length === 0 && <p className="vuoto">Nessuna faccenda. Tutto fatto! 🎉</p>}
+        {faccende.length === 0 && <p className="vuoto">Nessuna faccenda. Tutto fatto! <IconFesta width={20} height={20} /></p>}
       </ul>
     </div>
   );

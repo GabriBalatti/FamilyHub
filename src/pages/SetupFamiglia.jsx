@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../lib/AuthContext';
+import IconSaluto from '../assets/icons/saluto.svg?react';
 
 export default function SetupFamiglia() {
   const { session, ricaricaProfilo } = useAuth();
@@ -39,7 +40,7 @@ export default function SetupFamiglia() {
     const { data: famiglia, error: erroreRicerca } = await supabase
       .from('famiglie')
       .select('id')
-      .eq('codice_invito', codiceInvito.trim())
+      .eq('codice_invito', codiceInvito.trim().toLowerCase())
       .single();
 
     if (erroreRicerca || !famiglia) {
@@ -69,15 +70,15 @@ export default function SetupFamiglia() {
 
   return (
     <div className="auth-container">
-      <h1>Benvenuto! 👋</h1>
-      <p>Prima di iniziare, configura il tuo profilo familiare.</p>
+      <h1>Benvenuto! <IconSaluto width={40} height={40} /></h1>
+      <p>Prima di iniziare, configura il tuo profilo entrando in una famiglia o creandone una nuova.</p>
 
       <div className="tabs">
         <button
           className={modalita === 'crea' ? 'tab active' : 'tab'}
           onClick={() => setModalita('crea')}
         >
-          Crea famiglia
+          Crea una famiglia
         </button>
         <button
           className={modalita === 'entra' ? 'tab active' : 'tab'}
@@ -88,30 +89,40 @@ export default function SetupFamiglia() {
       </div>
 
       <form onSubmit={modalita === 'crea' ? creaFamiglia : entraInFamiglia} className="auth-form">
-        <input
-          type="text"
-          placeholder="Il tuo nome"
-          value={nome}
-          onChange={(e) => setNome(e.target.value)}
-          required
-        />
-
-        {modalita === 'crea' ? (
+        <label className="campo-label">
+          Nome
           <input
             type="text"
-            placeholder="Nome famiglia (es. Famiglia Rossi)"
+            placeholder="Gabri..."
+            value={nome}
+            onChange={(e) => setNome(e.target.value)}
+            required
+          />
+        </label>
+
+        {modalita === 'crea' ? (
+          <label className="campo-label">
+          Nome famiglia
+          <input
+            type="text"
+            placeholder="Famiglia Balatti..."
             value={nomeFamiglia}
             onChange={(e) => setNomeFamiglia(e.target.value)}
             required
           />
+          </label>
         ) : (
+          <label className="campo-label">
+          Codice invito
           <input
             type="text"
-            placeholder="Codice invito"
+            placeholder="xx000xx0..."
             value={codiceInvito}
-            onChange={(e) => setCodiceInvito(e.target.value)}
+            onChange={(e) => setCodiceInvito(e.target.value.toLowerCase())}
+            style={{ textTransform: 'lowercase' }}
             required
           />
+          </label>
         )}
 
         {errore && <p className="errore">{errore}</p>}
