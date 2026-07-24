@@ -1,5 +1,13 @@
+# Editor e configurazioni locali
+.vscode/
+
+# Dipendenze e build
 node_modules
 dist
+
+# Configurazioni e segreti locali
 .env
 .env.local
+
+# File di log
 *.log
