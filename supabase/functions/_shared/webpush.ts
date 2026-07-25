@@ -18,6 +18,20 @@ interface NotificaPush {
   url?: string;
 }
 
+async function inviaConTimeout(sub: { endpoint: string; p256dh: string; auth: string }, payload: string, msTimeout = 8000) {
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), msTimeout);
+  try {
+    await webpush.sendNotification(
+      { endpoint: sub.endpoint, keys: { p256dh: sub.p256dh, auth: sub.auth } },
+      payload,
+      { agent: undefined } as never
+    );
+  } finally {
+    clearTimeout(timer);
+  }
+}
+
 // Invia una notifica push a uno o più profili, ripulendo le sottoscrizioni scadute (404/410)
 export async function inviaPushAProfili(profiloIds: string[], notifica: NotificaPush) {
   if (profiloIds.length === 0) return;
@@ -34,13 +48,15 @@ export async function inviaPushAProfili(profiloIds: string[], notifica: Notifica
   await Promise.all(
     sottoscrizioni.map(async (sub) => {
       try {
-        await webpush.sendNotification(
-          { endpoint: sub.endpoint, keys: { p256dh: sub.p256dh, auth: sub.auth } },
-          payload
-        );
-      } catch (err) {
+        await Promise.race([
+          inviaConTimeout(sub, payload),
+          new Promise((_, reject) => setTimeout(() => reject(new Error('timeout invio push')), 8000))
+        ]);
+      } catch (err: any) {
         if (err.statusCode === 404 || err.statusCode === 410) {
           await supabase.from('push_subscriptions').delete().eq('id', sub.id);
+        } else {
+          console.error('Invio push fallito per', sub.id, String(err));
         }
       }
     })
