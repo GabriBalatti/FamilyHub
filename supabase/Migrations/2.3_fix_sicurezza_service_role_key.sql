@@ -1,0 +1,1 @@
+revoke execute on function get_service_role_key() from public, anon, authenticated;
