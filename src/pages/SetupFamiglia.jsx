@@ -93,7 +93,7 @@ export default function SetupFamiglia() {
           Nome
           <input
             type="text"
-            placeholder="Gabri..."
+            placeholder="Jack..."
             value={nome}
             onChange={(e) => setNome(e.target.value)}
             required
@@ -105,7 +105,7 @@ export default function SetupFamiglia() {
           Nome famiglia
           <input
             type="text"
-            placeholder="Famiglia Balatti..."
+            placeholder="Famiglia Rossi..."
             value={nomeFamiglia}
             onChange={(e) => setNomeFamiglia(e.target.value)}
             required

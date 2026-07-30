@@ -88,6 +88,23 @@ body {
   margin-bottom: 24px;
 }
 
+.auth-sottotitolo {
+  margin-bottom: 20px;
+}
+
+.auth-login h1 {
+  color: var(--primario);
+}
+
+.auth-registrazione h1 {
+  color: var(--primario);
+}
+
+.auth-registrazione .tab.active {
+  background: var(--primario);
+  border-color: var(--primario);
+}
+
 .auth-form {
   display: flex;
   flex-direction: column;
