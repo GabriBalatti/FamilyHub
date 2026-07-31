@@ -6,7 +6,7 @@ import { useState, useEffect } from 'react';
 import { attivaNotifiche, disattivaNotifiche, notificheAttive } from '../lib/pushNotifications';
 
 export default function Profilo() {
-  const { profilo } = useAuth();
+  const { profilo, ricaricaProfilo } = useAuth();
   const [notificheOn, setNotificheOn] = useState(false);
   const [caricamentoNotifiche, setCaricamentoNotifiche] = useState(false);
 
@@ -31,7 +31,27 @@ export default function Profilo() {
   }
 
   async function logout() {
+    if (!window.confirm('Sei sicuro di voler uscire?')) return;
     await supabase.auth.signOut();
+  }
+
+  async function abbandonaFamiglia() {
+    const conferma = window.confirm(
+      'Sei sicuro di voler abbandonare la famiglia? Non vedrai più le faccende, la spesa e gli appuntamenti condivisi.'
+    );
+    if (!conferma) return;
+
+    const { error } = await supabase
+      .from('profili')
+      .update({ famiglia_id: null })
+      .eq('id', profilo.id);
+
+    if (error) {
+      alert('Errore: ' + error.message);
+      return;
+    }
+
+    await ricaricaProfilo();
   }
 
   return (
@@ -46,9 +66,25 @@ export default function Profilo() {
         </p>
         <p className="hint">Condividi questo codice con i familiari per farli entrare nel gruppo.</p>
       </div>
-      <button className="bottone-secondario" onClick={toggleNotifiche} disabled={caricamentoNotifiche}>
-        {notificheOn ? 'Disattiva notifiche' : 'Attiva notifiche'}
+      <div className="sezione-impostazioni">
+        <div className="riga-impostazione">
+          <span>Notifiche push</span>
+          <label className="switch">
+            <input
+              type="checkbox"
+              checked={notificheOn}
+              onChange={toggleNotifiche}
+              disabled={caricamentoNotifiche}
+            />
+            <span className="slider"></span>
+          </label>
+        </div>
+      </div>
+
+      <button className="bottone-pericolo" onClick={abbandonaFamiglia}>
+        Abbandona famiglia
       </button>
+
       <button className="bottone-secondario" onClick={logout}>
         <LogOut size={16} style={{ display: 'inline', verticalAlign: 'middle', marginRight: 6 }} />
         Esci

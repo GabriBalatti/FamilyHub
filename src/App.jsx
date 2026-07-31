@@ -26,10 +26,10 @@ function AppContenuto() {
     return <Login />;
   }
 
-  if (!profilo) {
+if (!profilo || !profilo.famiglia_id) {
     return <SetupFamiglia />;
   }
-
+  
   return (
     <div className="app-layout">
       <main className="contenuto-principale">
