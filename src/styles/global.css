@@ -458,6 +458,32 @@ button:active {
   cursor: not-allowed;
 }
 
+.switch-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.switch-caricamento {
+  opacity: 0.7;
+}
+
+.spinner {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border: 2px solid var(--bordo);
+  border-top-color: var(--primario);
+  border-radius: 50%;
+  animation: girata 0.6s linear infinite;
+}
+
+@keyframes girata {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 .caricamento-pagina {
   display: flex;
   align-items: center;

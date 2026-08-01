@@ -92,15 +92,18 @@ export default function Profilo() {
       <div className="sezione-impostazioni">
         <div className="riga-impostazione">
           <span>Notifiche push</span>
-          <label className="switch">
-            <input
-              type="checkbox"
-              checked={notificheOn}
-              onChange={toggleNotifiche}
-              disabled={caricamentoNotifiche}
-            />
-            <span className="slider"></span>
-          </label>
+          <div className="switch-wrapper">
+            {caricamentoNotifiche && <span className="spinner" aria-label="Caricamento" />}
+            <label className={`switch ${caricamentoNotifiche ? 'switch-caricamento' : ''}`}>
+              <input
+                type="checkbox"
+                checked={notificheOn}
+                onChange={toggleNotifiche}
+                disabled={caricamentoNotifiche}
+              />
+              <span className="slider"></span>
+            </label>
+          </div>
         </div>
       </div>
 
