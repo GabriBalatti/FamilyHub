@@ -4,11 +4,13 @@ import { LogOut } from 'lucide-react';
 import { APP_VERSION } from '../lib/version';
 import { useState, useEffect } from 'react';
 import { attivaNotifiche, disattivaNotifiche, notificheAttive } from '../lib/pushNotifications';
+import ConfermaModal from '../components/ConfermaModal';
 
 export default function Profilo() {
   const { profilo, ricaricaProfilo } = useAuth();
   const [notificheOn, setNotificheOn] = useState(false);
   const [caricamentoNotifiche, setCaricamentoNotifiche] = useState(false);
+  const [modaleAperto, setModaleAperto] = useState(null); // 'logout' | 'abbandona' | null
 
   useEffect(() => {
     notificheAttive().then(setNotificheOn);
@@ -30,16 +32,13 @@ export default function Profilo() {
     setCaricamentoNotifiche(false);
   }
 
-  async function logout() {
-    if (!window.confirm('Sei sicuro di voler uscire?')) return;
+  async function confermaLogout() {
+    setModaleAperto(null);
     await supabase.auth.signOut();
   }
 
-  async function abbandonaFamiglia() {
-    const conferma = window.confirm(
-      'Sei sicuro di voler abbandonare la famiglia? Non vedrai più le faccende, la spesa e gli appuntamenti condivisi.'
-    );
-    if (!conferma) return;
+  async function confermaAbbandonaFamiglia() {
+    setModaleAperto(null);
 
     const { error } = await supabase
       .from('profili')
@@ -81,15 +80,37 @@ export default function Profilo() {
         </div>
       </div>
 
-      <button className="bottone-pericolo" onClick={abbandonaFamiglia}>
+      <button className="bottone-pericolo" onClick={() => setModaleAperto('abbandona')}>
         Abbandona famiglia
       </button>
 
-      <button className="bottone-secondario" onClick={logout}>
+      <button className="bottone-secondario" onClick={() => setModaleAperto('logout')}>
         <LogOut size={16} style={{ display: 'inline', verticalAlign: 'middle', marginRight: 6 }} />
         Esci
       </button>
       <p className="versione-app">v{APP_VERSION}</p>
+
+      {modaleAperto === 'logout' && (
+        <ConfermaModal
+          titolo="Uscire dall'account?"
+          messaggio="Dovrai effettuare di nuovo l'accesso per tornare a usare FamilyHub."
+          testoConferma="Esci"
+          pericoloso
+          onConferma={confermaLogout}
+          onAnnulla={() => setModaleAperto(null)}
+        />
+      )}
+
+      {modaleAperto === 'abbandona' && (
+        <ConfermaModal
+          titolo="Abbandonare la famiglia?"
+          messaggio="Non vedrai più le faccende, la spesa e gli appuntamenti condivisi. Potrai rientrare in un secondo momento con un codice invito."
+          testoConferma="Abbandona"
+          pericoloso
+          onConferma={confermaAbbandonaFamiglia}
+          onAnnulla={() => setModaleAperto(null)}
+        />
+      )}
     </div>
   );
 }
