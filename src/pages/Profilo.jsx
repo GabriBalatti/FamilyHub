@@ -40,17 +40,41 @@ export default function Profilo() {
   async function confermaAbbandonaFamiglia() {
     setModaleAperto(null);
 
-    const { error } = await supabase
-      .from('profili')
-      .update({ famiglia_id: null })
-      .eq('id', profilo.id);
+    try {
+      // 1. Rimuove l'utente dalle faccende assegnategli (restano nella lista, senza responsabile)
+      const { error: erroreFaccende } = await supabase
+        .from('faccende')
+        .update({ assegnato_a: null })
+        .eq('assegnato_a', profilo.id);
+      if (erroreFaccende) throw erroreFaccende;
 
-    if (error) {
-      alert('Errore: ' + error.message);
-      return;
+      // 2. Rimuove l'utente dai partecipanti degli appuntamenti in cui è incluso
+      const { data: eventi, error: erroreLettura } = await supabase
+        .from('appuntamenti')
+        .select('id, partecipanti')
+        .contains('partecipanti', [profilo.id]);
+      if (erroreLettura) throw erroreLettura;
+
+      for (const evento of eventi || []) {
+        const nuoviPartecipanti = evento.partecipanti.filter((id) => id !== profilo.id);
+        const { error: erroreUpdate } = await supabase
+          .from('appuntamenti')
+          .update({ partecipanti: nuoviPartecipanti })
+          .eq('id', evento.id);
+        if (erroreUpdate) throw erroreUpdate;
+      }
+
+      // 3. Elimina il profilo (push_subscriptions viene rimossa automaticamente in CASCADE)
+      const { error: erroreEliminazione } = await supabase
+        .from('profili')
+        .delete()
+        .eq('id', profilo.id);
+      if (erroreEliminazione) throw erroreEliminazione;
+
+      await ricaricaProfilo();
+    } catch (err) {
+      alert("Errore durante l'abbandono della famiglia: " + err.message);
     }
-
-    await ricaricaProfilo();
   }
 
   return (
