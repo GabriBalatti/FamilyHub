@@ -500,7 +500,7 @@ button:active {
   margin-top: 24px;
 }
 
-/* ===== Modale conferma ===== */
+/* ===== Modal conferma ===== */
 .modal-overlay {
   position: fixed;
   inset: 0;
@@ -549,4 +549,78 @@ button:active {
 
 .bottone-pericolo-pieno:hover {
   background: #dc2626;
+}
+
+/* ===== Modal Invito ===== */
+.modal-contenuto.modal-invito {
+  text-align: center;
+}
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.modal-header h3 {
+  margin-bottom: 0;
+}
+
+.bottone-chiudi {
+  background: none;
+  border: none;
+  color: #64748b;
+  padding: 4px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  width: auto;
+}
+
+.bottone-chiudi:hover {
+  background: #f1f5f9;
+  color: var(--testo);
+}
+
+.sezione-codice {
+  margin-bottom: 16px;
+}
+
+.sezione-codice .codice-invito {
+  display: inline-block;
+  margin-top: 4px;
+  font-weight: 600;
+}
+
+.qr-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: white;
+  padding: 12px;
+  border-radius: 10px;
+  border: 1px solid var(--bordo);
+  margin-bottom: 16px;
+}
+
+.qr-container .hint {
+  margin-top: 8px;
+}
+
+.modal-azioni-griglia {
+  display: flex;
+  gap: 10px;
+}
+
+.modal-azioni-griglia .bottone-secondario {
+  margin-top: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  flex: 1;
 }

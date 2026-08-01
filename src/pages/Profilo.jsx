@@ -1,16 +1,17 @@
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../lib/AuthContext';
-import { LogOut } from 'lucide-react';
+import { LogOut, UserPlus } from 'lucide-react';
 import { APP_VERSION } from '../lib/version';
 import { useState, useEffect } from 'react';
 import { attivaNotifiche, disattivaNotifiche, notificheAttive } from '../lib/pushNotifications';
 import ConfermaModal from '../components/ConfermaModal';
+import InvitaModal from '../components/InvitaModal';
 
 export default function Profilo() {
   const { profilo, ricaricaProfilo } = useAuth();
   const [notificheOn, setNotificheOn] = useState(false);
   const [caricamentoNotifiche, setCaricamentoNotifiche] = useState(false);
-  const [modaleAperto, setModaleAperto] = useState(null); // 'logout' | 'abbandona' | null
+  const [modaleAperto, setModaleAperto] = useState(null); // 'logout' | 'abbandona' | 'invita' | null
 
   useEffect(() => {
     notificheAttive().then(setNotificheOn);
@@ -41,14 +42,12 @@ export default function Profilo() {
     setModaleAperto(null);
 
     try {
-      // 1. Rimuove l'utente dalle faccende assegnategli (restano nella lista, senza responsabile)
       const { error: erroreFaccende } = await supabase
         .from('faccende')
         .update({ assegnato_a: null })
         .eq('assegnato_a', profilo.id);
       if (erroreFaccende) throw erroreFaccende;
 
-      // 2. Rimuove l'utente dai partecipanti degli appuntamenti in cui è incluso
       const { data: eventi, error: erroreLettura } = await supabase
         .from('appuntamenti')
         .select('id, partecipanti')
@@ -64,7 +63,6 @@ export default function Profilo() {
         if (erroreUpdate) throw erroreUpdate;
       }
 
-      // 3. Elimina il profilo (push_subscriptions viene rimossa automaticamente in CASCADE)
       const { error: erroreEliminazione } = await supabase
         .from('profili')
         .delete()
@@ -83,12 +81,18 @@ export default function Profilo() {
       <div className="card-profilo">
         <p><strong>Nome:</strong> {profilo.nome}</p>
         <p><strong>Famiglia:</strong> {profilo.famiglie?.nome}</p>
-        <p>
-          <strong>Codice invito:</strong>{' '}
-          <code className="codice-invito">{profilo.famiglie?.codice_invito}</code>
-        </p>
-        <p className="hint">Condividi questo codice con i familiari per farli entrare nel gruppo.</p>
+        
+        {/* Pulsante unico per aprire il Modal d'invito */}
+        <button 
+          className="bottone-secondario" 
+          onClick={() => setModaleAperto('invita')}
+          style={{ marginTop: '12px' }}
+        >
+          <UserPlus size={18} style={{ display: 'inline', verticalAlign: 'middle', marginRight: 8 }} />
+          Invita un nuovo membro
+        </button>
       </div>
+
       <div className="sezione-impostazioni">
         <div className="riga-impostazione">
           <span>Notifiche push</span>
@@ -117,6 +121,16 @@ export default function Profilo() {
       </button>
       <p className="versione-app">v{APP_VERSION}</p>
 
+      {/* Modal Invita */}
+      {modaleAperto === 'invita' && (
+        <InvitaModal
+          codiceInvito={profilo.famiglie?.codice_invito}
+          nomeFamiglia={profilo.famiglie?.nome}
+          onChiudi={() => setModaleAperto(null)}
+        />
+      )}
+
+      {/* Modal Logout */}
       {modaleAperto === 'logout' && (
         <ConfermaModal
           titolo="Uscire dall'account?"
@@ -128,6 +142,7 @@ export default function Profilo() {
         />
       )}
 
+      {/* Modal Abbandona */}
       {modaleAperto === 'abbandona' && (
         <ConfermaModal
           titolo="Abbandonare la famiglia?"
