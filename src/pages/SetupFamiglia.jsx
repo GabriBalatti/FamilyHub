@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../lib/AuthContext';
 import IconSaluto from '../assets/icons/saluto.svg?react';
+import { trovaFamigliaDaCodice } from '../lib/famiglie';
 
 export default function SetupFamiglia() {
   const { session, ricaricaProfilo } = useAuth();
@@ -37,13 +38,9 @@ export default function SetupFamiglia() {
     setErrore('');
     setCaricamento(true);
 
-    const { data: famiglia, error: erroreRicerca } = await supabase
-      .from('famiglie')
-      .select('id')
-      .eq('codice_invito', codiceInvito.trim().toLowerCase())
-      .single();
+    const famiglia = await trovaFamigliaDaCodice(codiceInvito);
 
-    if (erroreRicerca || !famiglia) {
+    if (!famiglia) {
       setErrore('Codice invito non valido');
       setCaricamento(false);
       return;
@@ -102,26 +99,26 @@ export default function SetupFamiglia() {
 
         {modalita === 'crea' ? (
           <label className="campo-label">
-          Nome famiglia
-          <input
-            type="text"
-            placeholder="Famiglia Rossi..."
-            value={nomeFamiglia}
-            onChange={(e) => setNomeFamiglia(e.target.value)}
-            required
-          />
+            Nome famiglia
+            <input
+              type="text"
+              placeholder="Famiglia Rossi..."
+              value={nomeFamiglia}
+              onChange={(e) => setNomeFamiglia(e.target.value)}
+              required
+            />
           </label>
         ) : (
           <label className="campo-label">
-          Codice invito
-          <input
-            type="text"
-            placeholder="xx000xx0..."
-            value={codiceInvito}
-            onChange={(e) => setCodiceInvito(e.target.value.toLowerCase())}
-            style={{ textTransform: 'lowercase' }}
-            required
-          />
+            Codice invito
+            <input
+              type="text"
+              placeholder="xx000xx0..."
+              value={codiceInvito}
+              onChange={(e) => setCodiceInvito(e.target.value.toLowerCase())}
+              style={{ textTransform: 'lowercase' }}
+              required
+            />
           </label>
         )}
 
