@@ -2,10 +2,11 @@ import { useState } from 'react';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../lib/AuthContext';
 import IconFesta from '../assets/icons/festa.svg?react';
+import { useNavigate } from 'react-router-dom';
 
-
-export default function UnisciFamigliaInvito({ famiglia }) {
+export default function UnisciFamigliaInvito({ famiglia, onAnnulla }) {
   const { session, ricaricaProfilo } = useAuth();
+  const navigate = useNavigate();
   const [nome, setNome] = useState('');
   const [errore, setErrore] = useState('');
   const [caricamento, setCaricamento] = useState(false);
@@ -27,6 +28,7 @@ export default function UnisciFamigliaInvito({ famiglia }) {
       return;
     }
 
+    navigate('/faccende', { replace: true });
     await ricaricaProfilo();
   }
 
@@ -47,6 +49,9 @@ export default function UnisciFamigliaInvito({ famiglia }) {
           {caricamento ? 'Attendere...' : 'Entra nella famiglia'}
         </button>
       </form>
+      <button className="link-button" onClick={onAnnulla}>
+        Preferisci creare una famiglia o usare un altro codice? Torna al setup
+      </button>
     </div>
   );
 }
