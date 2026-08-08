@@ -1,6 +1,6 @@
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../lib/AuthContext';
-import { LogOut, UserPlus } from 'lucide-react';
+import { LogOut, UserPlus, Bell, ShieldAlert, Users } from 'lucide-react';
 import { APP_VERSION } from '../lib/version';
 import { useState, useEffect } from 'react';
 import { attivaNotifiche, disattivaNotifiche, notificheAttive } from '../lib/pushNotifications';
@@ -11,11 +11,38 @@ export default function Profilo() {
   const { profilo, ricaricaProfilo } = useAuth();
   const [notificheOn, setNotificheOn] = useState(false);
   const [caricamentoNotifiche, setCaricamentoNotifiche] = useState(false);
-  const [modaleAperto, setModaleAperto] = useState(null); // 'logout' | 'abbandona' | 'invita' | null
+  const [modaleAperto, setModaleAperto] = useState(null);
+  const [membri, setMembri] = useState([]);
 
   useEffect(() => {
     notificheAttive().then(setNotificheOn);
   }, []);
+
+  useEffect(() => {
+    if (!profilo?.famiglia_id) return;
+
+    caricaMembri();
+
+    const canale = supabase
+      .channel('membri-profilo-canale')
+      .on(
+        'postgres_changes',
+        { event: '*', schema: 'public', table: 'profili' },
+        () => caricaMembri()
+      )
+      .subscribe();
+
+    return () => supabase.removeChannel(canale);
+  }, [profilo?.famiglia_id]);
+
+  async function caricaMembri() {
+    const { data } = await supabase
+      .from('profili')
+      .select('id, nome, colore')
+      .eq('famiglia_id', profilo.famiglia_id)
+      .order('nome');
+    setMembri(data || []);
+  }
 
   async function toggleNotifiche() {
     setCaricamentoNotifiche(true);
@@ -75,62 +102,103 @@ export default function Profilo() {
     }
   }
 
+  const inizialeNome = profilo?.nome ? profilo.nome.charAt(0).toUpperCase() : '?';
+
   return (
-    <div className="pagina">
-      <h2>Il tuo profilo</h2>
-      <div className="card-profilo">
-        <p><strong>Nome:</strong> {profilo.nome}</p>
-        <p><strong>Famiglia:</strong> {profilo.famiglie?.nome}</p>
-        
-        {/* Pulsante unico per aprire il Modal d'invito */}
+    <div className="pagina pagina-profilo">
+      <h2>Profilo</h2>
+
+      {/* Header Utente con Avatar */}
+      <div className="card-profilo-header">
+        <div className="avatar">{inizialeNome}</div>
+        <div className="info-profilo">
+          <h3>{profilo?.nome}</h3>
+          <span className="badge-famiglia">
+            <Users size={14} />
+            {profilo?.famiglie?.nome || 'Nessuna famiglia'}
+          </span>
+        </div>
+      </div>
+
+      {/* Sezione Gestione Famiglia */}
+      <div className="gruppo-sezione">
+        <span className="titolo-sezione">Famiglia</span>
+
+        {membri.length > 0 && (
+          <ul className="lista-membri-famiglia">
+            {membri.map((m) => (
+              <li key={m.id} className="membro-riga">
+                <div className="avatar avatar-piccolo" style={{ background: m.colore }}>
+                  {m.nome.charAt(0).toUpperCase()}
+                </div>
+                <span>{m.nome}</span>
+                {m.id === profilo.id && <span className="badge-tu">Tu</span>}
+              </li>
+            ))}
+          </ul>
+        )}
+
         <button 
-          className="bottone-secondario" 
+          className="bottone-secondario bottone-icona" 
           onClick={() => setModaleAperto('invita')}
-          style={{ marginTop: '12px' }}
         >
-          <UserPlus size={18} style={{ display: 'inline', verticalAlign: 'middle', marginRight: 8 }} />
-          Invita un nuovo membro
+          <UserPlus size={18} />
+          <span>Invita un nuovo membro</span>
         </button>
       </div>
 
-      <div className="sezione-impostazioni">
-        <div className="riga-impostazione">
-          <span>Notifiche push</span>
-          <div className="switch-wrapper">
-            {caricamentoNotifiche && <span className="spinner" aria-label="Caricamento" />}
-            <label className={`switch ${caricamentoNotifiche ? 'switch-caricamento' : ''}`}>
-              <input
-                type="checkbox"
-                checked={notificheOn}
-                onChange={toggleNotifiche}
-                disabled={caricamentoNotifiche}
-              />
-              <span className="slider"></span>
-            </label>
+      {/* Sezione Preferenze */}
+      <div className="gruppo-sezione">
+        <span className="titolo-sezione">Preferenze</span>
+        <div className="sezione-impostazioni">
+          <div className="riga-impostazione">
+            <div className="etichetta-impostazione">
+              <Bell size={18} />
+              <span>Notifiche push</span>
+            </div>
+            <div className="switch-wrapper">
+              {caricamentoNotifiche && <span className="spinner" aria-label="Caricamento" />}
+              <label className={`switch ${caricamentoNotifiche ? 'switch-caricamento' : ''}`}>
+                <input
+                  type="checkbox"
+                  checked={notificheOn}
+                  onChange={toggleNotifiche}
+                  disabled={caricamentoNotifiche}
+                />
+                <span className="slider"></span>
+              </label>
+            </div>
           </div>
         </div>
       </div>
 
-      <button className="bottone-pericolo" onClick={() => setModaleAperto('abbandona')}>
-        Abbandona famiglia
-      </button>
+      {/* Sezione Account e Azioni */}
+      <div className="gruppo-sezione">
+        <span className="titolo-sezione">Account</span>
+        <div className="azioni-account">
+          <button className="bottone-secondario bottone-icona" onClick={() => setModaleAperto('logout')}>
+            <LogOut size={18} />
+            <span>Esci dall'account</span>
+          </button>
 
-      <button className="bottone-secondario" onClick={() => setModaleAperto('logout')}>
-        <LogOut size={16} style={{ display: 'inline', verticalAlign: 'middle', marginRight: 6 }} />
-        Esci
-      </button>
+          <button className="bottone-link-pericolo" onClick={() => setModaleAperto('abbandona')}>
+            <ShieldAlert size={16} />
+            <span>Abbandona famiglia</span>
+          </button>
+        </div>
+      </div>
+
       <p className="versione-app">v{APP_VERSION}</p>
 
-      {/* Modal Invita */}
+      {/* Modali */}
       {modaleAperto === 'invita' && (
         <InvitaModal
-          codiceInvito={profilo.famiglie?.codice_invito}
-          nomeFamiglia={profilo.famiglie?.nome}
+          codiceInvito={profilo?.famiglie?.codice_invito}
+          nomeFamiglia={profilo?.famiglie?.nome}
           onChiudi={() => setModaleAperto(null)}
         />
       )}
 
-      {/* Modal Logout */}
       {modaleAperto === 'logout' && (
         <ConfermaModal
           titolo="Uscire dall'account?"
@@ -142,7 +210,6 @@ export default function Profilo() {
         />
       )}
 
-      {/* Modal Abbandona */}
       {modaleAperto === 'abbandona' && (
         <ConfermaModal
           titolo="Abbandonare la famiglia?"

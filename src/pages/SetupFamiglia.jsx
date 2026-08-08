@@ -3,6 +3,9 @@ import { supabase } from '../lib/supabase';
 import { useAuth } from '../lib/AuthContext';
 import IconSaluto from '../assets/icons/saluto.svg?react';
 import { trovaFamigliaDaCodice } from '../lib/famiglie';
+import { QrCode } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import ScannerQR from '../components/ScannerQR';
 
 export default function SetupFamiglia() {
   const { session, ricaricaProfilo } = useAuth();
@@ -12,6 +15,13 @@ export default function SetupFamiglia() {
   const [codiceInvito, setCodiceInvito] = useState('');
   const [errore, setErrore] = useState('');
   const [caricamento, setCaricamento] = useState(false);
+  const [scannerAperto, setScannerAperto] = useState(false);
+  const navigate = useNavigate();
+
+  function codiceScansionato(codice) {
+    setScannerAperto(false);
+    navigate(`/join?code=${codice}`);
+  }
 
   async function creaFamiglia(e) {
     e.preventDefault();
@@ -98,6 +108,7 @@ export default function SetupFamiglia() {
         </label>
 
         {modalita === 'crea' ? (
+          /* SEZIONE CREA FAMIGLIA */
           <label className="campo-label">
             Nome famiglia
             <input
@@ -109,17 +120,25 @@ export default function SetupFamiglia() {
             />
           </label>
         ) : (
-          <label className="campo-label">
-            Codice invito
-            <input
-              type="text"
-              placeholder="xx000xx0..."
-              value={codiceInvito}
-              onChange={(e) => setCodiceInvito(e.target.value.toLowerCase())}
-              style={{ textTransform: 'lowercase' }}
-              required
-            />
-          </label>
+          /* SEZIONE ENTRA IN FAMIGLIA */
+          <div className="sezione-entra" style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+            <label className="campo-label">
+              Codice invito
+              <input
+                type="text"
+                placeholder="xx000xx0..."
+                value={codiceInvito}
+                onChange={(e) => setCodiceInvito(e.target.value.toLowerCase())}
+                style={{ textTransform: 'lowercase' }}
+                required
+              />
+            </label>
+
+            <button type="button" className="bottone-secondario bottone-icona" onClick={() => setScannerAperto(true)}>
+              <QrCode size={18} />
+              <span>Scansiona QR</span>
+            </button>
+          </div>
         )}
 
         {errore && <p className="errore">{errore}</p>}
@@ -127,6 +146,10 @@ export default function SetupFamiglia() {
           {caricamento ? 'Attendere...' : modalita === 'crea' ? 'Crea famiglia' : 'Entra'}
         </button>
       </form>
+
+      {scannerAperto && (
+        <ScannerQR onCodiceTrovato={codiceScansionato} onChiudi={() => setScannerAperto(false)} />
+      )}
     </div>
   );
 }
