@@ -126,6 +126,10 @@ body {
   border-radius: 8px;
   cursor: pointer;
   font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
 }
 
 .tab.active {
@@ -720,6 +724,7 @@ button:active {
   font-weight: 600;
 }
 
+/* ===== QR Code & SetupFamiglia ===== */
 .qr-container {
   display: flex;
   flex-direction: column;
@@ -736,6 +741,15 @@ button:active {
   margin-top: 8px;
 }
 
+.setup-hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+/* ===== Modal azioni ===== */
 .modal-azioni-griglia {
   display: flex;
   gap: 10px;

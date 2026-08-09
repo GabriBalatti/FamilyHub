@@ -3,7 +3,7 @@ import { supabase } from '../lib/supabase';
 import { useAuth } from '../lib/AuthContext';
 import IconSaluto from '../assets/icons/saluto.svg?react';
 import { trovaFamigliaDaCodice } from '../lib/famiglie';
-import { QrCode } from 'lucide-react';
+import { QrCode, Home, LogIn } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import ScannerQR from '../components/ScannerQR';
 
@@ -77,21 +77,25 @@ export default function SetupFamiglia() {
 
   return (
     <div className="auth-container">
-      <h1>Benvenuto! <IconSaluto width={40} height={40} /></h1>
+      <div className="setup-hero">
+        <IconSaluto width={56} height={56} />
+        <h1>Benvenuto!</h1>
+      </div>
       <p>Prima di iniziare, configura il tuo profilo entrando in una famiglia o creandone una nuova.</p>
-
       <div className="tabs">
         <button
           className={modalita === 'crea' ? 'tab active' : 'tab'}
           onClick={() => setModalita('crea')}
         >
-          Crea una famiglia
+          <Home size={16} />
+          <span>Crea famiglia</span>
         </button>
         <button
           className={modalita === 'entra' ? 'tab active' : 'tab'}
           onClick={() => setModalita('entra')}
         >
-          Entra in famiglia
+          <LogIn size={16} />
+          <span>Entra in famiglia</span>
         </button>
       </div>
 
@@ -142,8 +146,9 @@ export default function SetupFamiglia() {
         )}
 
         {errore && <p className="errore">{errore}</p>}
-        <button type="submit" disabled={caricamento}>
-          {caricamento ? 'Attendere...' : modalita === 'crea' ? 'Crea famiglia' : 'Entra'}
+        <button type="submit" className="bottone-icona" disabled={caricamento}>
+          {modalita === 'crea' ? <Home size={18} /> : <LogIn size={18} />}
+          <span>{caricamento ? 'Attendere...' : modalita === 'crea' ? 'Crea famiglia' : 'Entra'}</span>
         </button>
       </form>
 
