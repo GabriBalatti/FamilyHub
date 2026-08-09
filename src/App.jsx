@@ -29,6 +29,7 @@ function AppContenuto() {
       setCaricamentoInvito(false);
       return;
     }
+    setCaricamentoInvito(true);
     trovaFamigliaDaCodice(codiceInvito).then((famiglia) => {
       setFamigliaInvito(famiglia);
       setCaricamentoInvito(false);
