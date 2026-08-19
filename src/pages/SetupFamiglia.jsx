@@ -137,6 +137,9 @@ export default function SetupFamiglia() {
                 required
               />
             </label>
+            <div className="divisore-oppure">
+              <span>oppure</span>
+            </div>
 
             <button type="button" className="bottone-secondario bottone-icona" onClick={() => setScannerAperto(true)}>
               <QrCode size={18} />

@@ -25,12 +25,14 @@ export default function ScannerQR({ onCodiceTrovato, onChiudi }) {
     <div className="modal-overlay" onClick={onChiudi}>
       <div className="modal-contenuto" onClick={(e) => e.stopPropagation()}>
         <h3>Scansiona il QR</h3>
-        <Scanner
-          onScan={gestisciScansione}
-          onError={() => setErrore('Impossibile accedere alla fotocamera. Controlla i permessi del browser.')}
-          constraints={{ facingMode: 'environment' }}
-          formats={['qr_code']}
-        />
+        <div className="scanner-contenitore">
+          <Scanner
+            onScan={gestisciScansione}
+            onError={() => setErrore('Impossibile accedere alla fotocamera. Controlla i permessi del browser.')}
+            constraints={{ facingMode: 'environment' }}
+            formats={['qr_code']}
+          />
+        </div>
         {errore && <p className="errore">{errore}</p>}
         <div className="modal-azioni">
           <button onClick={onChiudi}>Chiudi</button>

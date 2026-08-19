@@ -725,6 +725,25 @@ button:active {
 }
 
 /* ===== QR Code & SetupFamiglia ===== */
+
+.divisore-oppure {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: #94a3b8;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.divisore-oppure::before,
+.divisore-oppure::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--bordo);
+}
+
 .qr-container {
   display: flex;
   flex-direction: column;
@@ -747,6 +766,12 @@ button:active {
   align-items: center;
   gap: 8px;
   margin-bottom: 8px;
+}
+
+.scanner-contenitore {
+  border-radius: 12px;
+  overflow: hidden;
+  margin-bottom: 16px;
 }
 
 /* ===== Modal azioni ===== */
