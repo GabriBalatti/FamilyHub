@@ -1,7 +1,16 @@
-import { precacheAndRoute } from 'workbox-precaching';
+import { precacheAndRoute, cleanupOutdatedCaches } from 'workbox-precaching';
 
+// pulizia della cache e registrazione del service worker
 precacheAndRoute(self.__WB_MANIFEST);
+cleanupOutdatedCaches();
+self.addEventListener('install', () => {
+  self.skipWaiting();
+});
+self.addEventListener('activate', (event) => {
+  event.waitUntil(self.clients.claim());
+});
 
+// notifiche push
 self.addEventListener('push', (event) => {
   const dati = event.data ? event.data.json() : {};
   const titolo = dati.titolo || 'FamilyHub';
@@ -14,6 +23,7 @@ self.addEventListener('push', (event) => {
   event.waitUntil(self.registration.showNotification(titolo, opzioni));
 });
 
+// click sulla notifica
 self.addEventListener('notificationclick', (event) => {
   event.notification.close();
   const url = event.notification.data?.url || '/';

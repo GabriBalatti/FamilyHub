@@ -13,6 +13,13 @@ export default defineConfig({
       srcDir: 'src',
       filename: 'sw.js',
       includeAssets: ['favicon.ico', 'icon-192.png', 'icon-512.png'],
+      
+      // Inietta l'aggiornamento automatico nei precache
+      injectManifest: {
+        globPatterns: ['**/*.{js,css,html,ico,png,svg}'],
+        maximumFileSizeToCacheInBytes: 3000000 // 3MB di limite massimo precache
+      },
+
       manifest: {
         name: 'FamilyHub',
         short_name: 'Family',

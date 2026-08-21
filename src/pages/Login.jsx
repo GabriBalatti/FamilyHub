@@ -18,6 +18,7 @@ function traduciErrore(message) {
 export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [confermaPassword, setConfermaPassword] = useState('');
   const [modalita, setModalita] = useState('login'); // login | registrazione
   const [errore, setErrore] = useState('');
   const [caricamento, setCaricamento] = useState(false);
@@ -25,6 +26,12 @@ export default function Login() {
   async function handleSubmit(e) {
     e.preventDefault();
     setErrore('');
+
+    if (modalita === 'registrazione' && password !== confermaPassword) {
+      setErrore('Le password non coincidono');
+      return;
+    }
+
     setCaricamento(true);
 
     if (modalita === 'login') {
@@ -38,9 +45,13 @@ export default function Login() {
     setCaricamento(false);
   }
 
-  return (
-    <div className="auth-container"><IconLogo width={64} height={64} />
+return (
+    <div className={`auth-container ${modalita === 'registrazione' ? 'auth-registrazione' : 'auth-login'}`}>
+      <IconLogo width={64} height={64} />
       <h1>FamilyHub</h1>
+      <p className="auth-sottotitolo">
+        {modalita === 'login' ? 'Bentornato! Accedi al tuo profilo' : 'Crea il tuo account e unisciti alla famiglia'}
+      </p>
       <form onSubmit={handleSubmit} className="auth-form">
         <input
           type="email"
@@ -49,14 +60,24 @@ export default function Login() {
           onChange={(e) => setEmail(e.target.value)}
           required
         />
-        <input
+           <input
           type="password"
           placeholder="Password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           required
-          minLength={6}
+          minLength={8}
         />
+        {modalita === 'registrazione' && (
+          <input
+            type="password"
+            placeholder="Conferma password"
+            value={confermaPassword}
+            onChange={(e) => setConfermaPassword(e.target.value)}
+            required
+            minLength={8}
+          />
+        )}
         {errore && <p className="errore">{errore}</p>}
         <button type="submit" disabled={caricamento}>
           {caricamento ? 'Attendere...' : modalita === 'login' ? 'Accedi' : 'Registrati'}
@@ -64,7 +85,11 @@ export default function Login() {
       </form>
       <button
         className="link-button"
-        onClick={() => setModalita(modalita === 'login' ? 'registrazione' : 'login')}
+        onClick={() => {
+          setModalita(modalita === 'login' ? 'registrazione' : 'login');
+          setConfermaPassword('');
+          setErrore('');
+        }}
       >
         {modalita === 'login' ? 'Non hai un account? Registrati' : 'Hai già un account? Accedi'}
       </button>

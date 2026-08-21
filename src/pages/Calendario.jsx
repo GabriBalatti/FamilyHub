@@ -24,6 +24,11 @@ export default function Calendario() {
         { event: '*', schema: 'public', table: 'appuntamenti' },
         () => caricaAppuntamenti()
       )
+      .on(
+        'postgres_changes',
+        { event: '*', schema: 'public', table: 'profili' },
+        () => caricaMembri()
+      )
       .subscribe();
 
     return () => supabase.removeChannel(canale);

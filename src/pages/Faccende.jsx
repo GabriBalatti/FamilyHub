@@ -24,6 +24,11 @@ export default function Faccende() {
         { event: '*', schema: 'public', table: 'faccende' },
         () => caricaFaccende()
       )
+      .on(
+        'postgres_changes',
+        { event: '*', schema: 'public', table: 'profili' },
+        () => caricaMembri()
+      )
       .subscribe();
 
     return () => supabase.removeChannel(canale);
