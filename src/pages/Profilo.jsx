@@ -15,8 +15,8 @@ export default function Profilo() {
   const [membri, setMembri] = useState([]);
 
   useEffect(() => {
-    notificheAttive().then(setNotificheOn);
-  }, []);
+    notificheAttive(profilo.id).then(setNotificheOn);
+  }, [profilo.id]);
 
   useEffect(() => {
     if (!profilo?.famiglia_id) return;
@@ -138,8 +138,8 @@ export default function Profilo() {
           </ul>
         )}
 
-        <button 
-          className="bottone-secondario bottone-icona" 
+        <button
+          className="bottone-secondario bottone-icona"
           onClick={() => setModaleAperto('invita')}
         >
           <UserPlus size={18} />

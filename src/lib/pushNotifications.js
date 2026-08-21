@@ -51,9 +51,39 @@ export async function disattivaNotifiche() {
   }
 }
 
-export async function notificheAttive() {
+export async function notificheAttive(profiloId) {
   if (!('serviceWorker' in navigator)) return false;
   const registration = await navigator.serviceWorker.ready;
   const subscription = await registration.pushManager.getSubscription();
-  return !!subscription;
+  if (!subscription) return false;
+
+  // La sottoscrizione del browser esiste, ma potrebbe essere "orfana"
+  // lato database (es. cancellata da un ON DELETE CASCADE dopo
+  // l'uscita da una famiglia). Verifichiamo e, se serve, la ripristiniamo.
+  const { data } = await supabase
+    .from('push_subscriptions')
+    .select('id')
+    .eq('endpoint', subscription.endpoint)
+    .eq('profilo_id', profiloId)
+    .maybeSingle();
+
+  if (!data) {
+    try {
+      const json = subscription.toJSON();
+      await supabase.from('push_subscriptions').upsert(
+        {
+          profilo_id: profiloId,
+          endpoint: json.endpoint,
+          p256dh: json.keys.p256dh,
+          auth: json.keys.auth,
+          user_agent: navigator.userAgent
+        },
+        { onConflict: 'endpoint' }
+      );
+    } catch {
+      return false;
+    }
+  }
+
+  return true;
 }
