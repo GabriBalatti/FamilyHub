@@ -1,9 +1,8 @@
 import { useState } from 'react';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../lib/AuthContext';
-import IconSaluto from '../assets/icons/saluto.svg?react';
 import { trovaFamigliaDaCodice } from '../lib/famiglie';
-import { QrCode, Home, LogIn } from 'lucide-react';
+import { QrCode, Home, LogIn, HandHeart } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import ScannerQR from '../components/ScannerQR';
 
@@ -78,7 +77,7 @@ export default function SetupFamiglia() {
   return (
     <div className="auth-container">
       <div className="setup-hero">
-        <IconSaluto width={56} height={56} />
+        <HandHeart size={56} strokeWidth={1.5} />
         <h1>Benvenuto!</h1>
       </div>
       <p>Prima di iniziare, configura il tuo profilo entrando in una famiglia o creandone una nuova.</p>
@@ -125,7 +124,7 @@ export default function SetupFamiglia() {
           </label>
         ) : (
           /* SEZIONE ENTRA IN FAMIGLIA */
-          <div className="sezione-entra" style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+          <div className="sezione-entra">
             <label className="campo-label">
               Codice invito
               <input

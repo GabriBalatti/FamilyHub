@@ -1,6 +1,6 @@
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../lib/AuthContext';
-import { LogOut, UserPlus, Bell, ShieldAlert, Users } from 'lucide-react';
+import { LogOut, UserPlus, Bell, ShieldAlert, Users, UserRound } from 'lucide-react';
 import { APP_VERSION } from '../lib/version';
 import { useState, useEffect } from 'react';
 import { attivaNotifiche, disattivaNotifiche, notificheAttive } from '../lib/pushNotifications';
@@ -106,7 +106,7 @@ export default function Profilo() {
 
   return (
     <div className="pagina pagina-profilo">
-      <h2>Profilo</h2>
+      <h2><UserRound size={22} /> Profilo</h2>
 
       {/* Header Utente con Avatar */}
       <div className="card-profilo-header">

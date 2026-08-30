@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { supabase } from '../lib/supabase';
-import IconLogo from '../assets/icons/famiglia.svg?react';
+import { HouseHeart } from 'lucide-react';
 
 function traduciErrore(message) {
   const errori = {
@@ -47,7 +47,7 @@ export default function Login() {
 
 return (
     <div className={`auth-container ${modalita === 'registrazione' ? 'auth-registrazione' : 'auth-login'}`}>
-      <IconLogo width={64} height={64} />
+      <HouseHeart size={64} strokeWidth={1.5} />
       <h1>FamilyHub</h1>
       <p className="auth-sottotitolo">
         {modalita === 'login' ? 'Bentornato! Accedi al tuo profilo' : 'Crea il tuo account e unisciti alla famiglia'}

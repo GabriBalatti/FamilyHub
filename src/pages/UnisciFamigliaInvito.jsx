@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../lib/AuthContext';
-import IconFesta from '../assets/icons/festa.svg?react';
+import { PartyPopper } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 export default function UnisciFamigliaInvito({ famiglia, onAnnulla }) {
@@ -34,7 +34,7 @@ export default function UnisciFamigliaInvito({ famiglia, onAnnulla }) {
 
   return (
     <div className="auth-container">
-      <h1>Sei stato invitato! <IconFesta width={40} height={40} /></h1>
+      <h1>Sei stato invitato! <PartyPopper size={40} /></h1>
       <p>Sei stato invitato a unirti alla famiglia <strong>{famiglia.nome}</strong>. Inserisci il tuo nome per entrare!</p>
       <form onSubmit={handleSubmit} className="auth-form">
         <input

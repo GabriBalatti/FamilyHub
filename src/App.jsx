@@ -6,6 +6,7 @@ import Login from './pages/Login';
 import SetupFamiglia from './pages/SetupFamiglia';
 import UnisciFamigliaInvito from './pages/UnisciFamigliaInvito';
 import GestisciInvito from './pages/GestisciInvito';
+import Home from './pages/Home';
 import Faccende from './pages/Faccende';
 import Spesa from './pages/Spesa';
 import Calendario from './pages/Calendario';
@@ -72,13 +73,14 @@ function AppContenuto() {
     <div className="app-layout">
       <main className="contenuto-principale">
         <Routes>
-          <Route path="/" element={<Navigate to="/faccende" replace />} />
+          <Route path="/" element={<Navigate to="/home" replace />} />
+          <Route path="/home" element={<Home />} />
           <Route path="/faccende" element={<Faccende />} />
           <Route path="/spesa" element={<Spesa />} />
           <Route path="/calendario" element={<Calendario />} />
           <Route path="/profilo" element={<Profilo />} />
           <Route path="/join" element={<GestisciInvito famiglia={famigliaInvito} />} />
-          <Route path="*" element={<Navigate to="/faccende" replace />} />
+          <Route path="*" element={<Navigate to="/home" replace />} />
         </Routes>
       </main>
       <NavBar />

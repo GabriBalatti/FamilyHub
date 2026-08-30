@@ -1,26 +1,29 @@
 import { NavLink } from 'react-router-dom';
-import IconFaccende from '../assets/icons/faccende.svg?react';
-import IconSpesa from '../assets/icons/spesa.svg?react';
-import IconCalendario from '../assets/icons/calendario.svg?react';
-import IconProfilo from '../assets/icons/profilo.svg?react';
+import { CalendarDays, Home, ListTodo, ShoppingCart, UserRound } from 'lucide-react';
 
 export default function NavBar() {
   return (
     <nav className="navbar">
       <NavLink to="/faccende" className={({ isActive }) => isActive ? 'attivo' : ''}>
-        <IconFaccende width={22} height={22} />
+        <ListTodo size={22} />
         <span>Faccende</span>
       </NavLink>
       <NavLink to="/spesa" className={({ isActive }) => isActive ? 'attivo' : ''}>
-        <IconSpesa width={22} height={22} />
+        <ShoppingCart size={22} />
         <span>Spesa</span>
       </NavLink>
+      <NavLink to="/home" className={({ isActive }) => isActive ? 'voce-home attivo' : 'voce-home'}>
+        <span className="cerchio-home">
+          <Home size={22} color="white" />
+        </span>
+        <span>Home</span>
+      </NavLink>
       <NavLink to="/calendario" className={({ isActive }) => isActive ? 'attivo' : ''}>
-        <IconCalendario width={22} height={22} />
+        <CalendarDays size={22} />
         <span>Calendario</span>
       </NavLink>
       <NavLink to="/profilo" className={({ isActive }) => isActive ? 'attivo' : ''}>
-        <IconProfilo width={22} height={22} />
+        <UserRound size={22} />
         <span>Profilo</span>
       </NavLink>
     </nav>

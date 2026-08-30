@@ -23,7 +23,7 @@ export default function ScannerQR({ onCodiceTrovato, onChiudi }) {
 
   return (
     <div className="modal-overlay" onClick={onChiudi}>
-      <div className="modal-contenuto" onClick={(e) => e.stopPropagation()}>
+      <div className="modal-contenuto modal-scanner" onClick={(e) => e.stopPropagation()}>
         <h3>Scansiona il QR</h3>
         <div className="scanner-contenitore">
           <Scanner
