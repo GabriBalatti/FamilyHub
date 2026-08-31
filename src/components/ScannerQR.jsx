@@ -1,8 +1,11 @@
 import { useState } from 'react';
 import { Scanner } from '@yudiel/react-qr-scanner';
+import { useBloccaScroll } from '../lib/useBloccaScroll';
+import ModalPortal from './ModalPortal';
 
 export default function ScannerQR({ onCodiceTrovato, onChiudi }) {
   const [errore, setErrore] = useState('');
+  useBloccaScroll();
 
   function gestisciScansione(codiciRilevati) {
     const testo = codiciRilevati?.[0]?.rawValue;
@@ -22,6 +25,7 @@ export default function ScannerQR({ onCodiceTrovato, onChiudi }) {
   }
 
   return (
+    <ModalPortal>
     <div className="modal-overlay" onClick={onChiudi}>
       <div className="modal-contenuto modal-scanner" onClick={(e) => e.stopPropagation()}>
         <h3>Scansiona il QR</h3>
@@ -39,5 +43,6 @@ export default function ScannerQR({ onCodiceTrovato, onChiudi }) {
         </div>
       </div>
     </div>
+    </ModalPortal>
   );
 }

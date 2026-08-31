@@ -1,9 +1,12 @@
 import { useState } from 'react';
 import { X, Copy, Share2, Check } from 'lucide-react';
 import { QRCodeSVG } from 'qrcode.react';
+import { useBloccaScroll } from '../lib/useBloccaScroll';
+import ModalPortal from './ModalPortal';
 
 export default function InvitaModal({ codiceInvito, nomeFamiglia, onChiudi }) {
   const [copiato, setCopiato] = useState(false);
+  useBloccaScroll();
 
   // Link dinamico d'invito
   const linkInvito = `${window.location.origin}/join?code=${codiceInvito}`;
@@ -71,6 +74,7 @@ export default function InvitaModal({ codiceInvito, nomeFamiglia, onChiudi }) {
   }
 
   return (
+    <ModalPortal>
     <div className="modal-overlay" onClick={onChiudi}>
       <div className="modal-contenuto modal-invito" onClick={(e) => e.stopPropagation()}>
         
@@ -111,5 +115,6 @@ export default function InvitaModal({ codiceInvito, nomeFamiglia, onChiudi }) {
 
       </div>
     </div>
+    </ModalPortal>
   );
 }

@@ -1,3 +1,6 @@
+import { useBloccaScroll } from '../lib/useBloccaScroll';
+import ModalPortal from './ModalPortal';
+
 export default function ConfermaModal({
   titolo,
   messaggio,
@@ -7,7 +10,10 @@ export default function ConfermaModal({
   onConferma,
   onAnnulla
 }) {
+  useBloccaScroll();
+
   return (
+    <ModalPortal>
     <div className="modal-overlay" onClick={onAnnulla}>
       <div className="modal-contenuto modal-conferma" onClick={(e) => e.stopPropagation()}>
         <h3>{titolo}</h3>
@@ -25,5 +31,6 @@ export default function ConfermaModal({
         </div>
       </div>
     </div>
+    </ModalPortal>
   );
 }
