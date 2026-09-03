@@ -1,8 +1,10 @@
 import { useEffect } from 'react';
 
 // Impedisce lo scroll della pagina dietro a un modal, anche su Safari iOS.
-export function useBloccaScroll() {
+export function useBloccaScroll(attivo = true) {
   useEffect(() => {
+    if (!attivo) return undefined;
+
     const posizioneScroll = window.scrollY;
     const stilePrecedente = {
       overflow: document.body.style.overflow,
@@ -23,5 +25,5 @@ export function useBloccaScroll() {
       document.body.style.width = stilePrecedente.width;
       window.scrollTo(0, posizioneScroll);
     };
-  }, []);
+  }, [attivo]);
 }

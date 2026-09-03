@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { HeartHandshake, LoaderCircle } from 'lucide-react';
 import { Routes, Route, Navigate, useSearchParams } from 'react-router-dom';
 import { AuthProvider, useAuth } from './lib/AuthContext';
 import { trovaFamigliaDaCodice } from './lib/famiglie';
@@ -13,6 +14,7 @@ import Calendario from './pages/Calendario';
 import Profilo from './pages/Profilo';
 import NavBar from './components/NavBar';
 import AvvisoModal from './components/AvvisoModal';
+import PullToRefresh from './components/PullToRefresh';
 import { APP_VERSION } from './lib/version';
 
 function AppContenuto() {
@@ -40,9 +42,13 @@ function AppContenuto() {
   if (loading || caricamentoInvito) {
     return (
       <div className="caricamento-pagina">
-        <p>Caricamento...
-          <span className="versione-app">v{APP_VERSION}</span>
-        </p>
+        <div className="caricamento-emblema">
+          <HeartHandshake size={36} />
+          <LoaderCircle className="caricamento-rotella" size={68} strokeWidth={1.3} />
+        </div>
+        <p>Sto preparando FamilyHub</p>
+        <span>Un attimo e ci siamo</span>
+        <small>v{APP_VERSION}</small>
       </div>
     );
   }
@@ -83,6 +89,7 @@ function AppContenuto() {
           <Route path="*" element={<Navigate to="/home" replace />} />
         </Routes>
       </main>
+      <PullToRefresh />
       <NavBar />
     </div>
   );

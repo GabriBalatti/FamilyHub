@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../lib/AuthContext';
 import { Trash2, CalendarDays, ListTodo, PartyPopper } from 'lucide-react';
+import SelettoreDataOra from '../components/SelettoreDataOra';
 
 export default function Faccende() {
   const { profilo } = useAuth();
@@ -98,11 +99,7 @@ export default function Faccende() {
         </label>
         <label className="campo-label">
           Scadenza
-          <input
-            type="date"
-            value={scadenza}
-            onChange={(e) => setScadenza(e.target.value)}
-          />
+          <SelettoreDataOra value={scadenza} onChange={setScadenza} />
         </label>
         <label className="campo-label">
           Chi se ne occupa?

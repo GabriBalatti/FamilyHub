@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../lib/AuthContext';
 import { Trash2, Clock, MapPin, Users, CalendarDays } from 'lucide-react';
+import SelettoreDataOra from '../components/SelettoreDataOra';
 
 export default function Calendario() {
   const { profilo } = useAuth();
@@ -111,11 +112,7 @@ export default function Calendario() {
         </label>
         <label className="campo-label">
           Data e ora*
-          <input
-            type="datetime-local"
-            value={dataInizio}
-            onChange={(e) => setDataInizio(e.target.value)}
-          />
+          <SelettoreDataOra value={dataInizio} onChange={setDataInizio} includeOra obbligatorio />
         </label>
         <label className="campo-label">
           Luogo
