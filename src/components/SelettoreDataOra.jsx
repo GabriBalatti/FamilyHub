@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { CalendarDays, ChevronDown, ChevronLeft, ChevronRight, ChevronUp, Clock } from 'lucide-react';
+import { CalendarDays, ChevronDown, ChevronLeft, ChevronRight, ChevronUp, Clock, X } from 'lucide-react';
 import { useBloccaScroll } from '../lib/useBloccaScroll';
 import ModalPortal from './ModalPortal';
 
@@ -73,7 +73,7 @@ export default function SelettoreDataOra({ value, onChange, includeOra = false, 
       <button type="button" className={`campo-data ${value ? 'compilato' : ''}`} onClick={apri}>
         <CalendarDays size={18} />
         <span>{testoData(value, includeOra)}</span>
-        {includeOra && <Clock size={16} />}
+        {includeOra && <Clock className="campo-data-orologio" size={16} />}
       </button>
 
       {aperto && (
@@ -83,6 +83,9 @@ export default function SelettoreDataOra({ value, onChange, includeOra = false, 
               <div className="modal-data-intestazione">
                 <span>{includeOra ? 'Data e ora' : 'Seleziona la data'}</span>
                 <strong>{selezione.toLocaleDateString('it-IT', { day: 'numeric', month: 'long' })}</strong>
+                <button type="button" className="modal-data-chiudi" onClick={() => setAperto(false)} aria-label="Chiudi selettore data">
+                  <X size={18} />
+                </button>
               </div>
 
               <div className="calendario-navigazione">

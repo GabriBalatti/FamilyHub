@@ -13,6 +13,7 @@ export default function Profilo() {
   const [caricamentoNotifiche, setCaricamentoNotifiche] = useState(false);
   const [modaleAperto, setModaleAperto] = useState(null);
   const [membri, setMembri] = useState([]);
+  const [caricamentoMembri, setCaricamentoMembri] = useState(true);
 
   useEffect(() => {
     notificheAttive(profilo.id).then(setNotificheOn);
@@ -36,12 +37,13 @@ export default function Profilo() {
   }, [profilo?.famiglia_id]);
 
   async function caricaMembri() {
-    const { data } = await supabase
+    const { data, error } = await supabase
       .from('profili')
       .select('id, nome, colore')
       .eq('famiglia_id', profilo.famiglia_id)
       .order('nome');
-    setMembri(data || []);
+    if (!error) setMembri(data || []);
+    setCaricamentoMembri(false);
   }
 
   async function toggleNotifiche() {
@@ -124,7 +126,16 @@ export default function Profilo() {
       <div className="gruppo-sezione">
         <span className="titolo-sezione">Famiglia</span>
 
-        {membri.length > 0 && (
+        {caricamentoMembri ? (
+          <ul className="lista-membri-famiglia lista-membri-caricamento" aria-label="Caricamento membri">
+            {[0, 1].map((riga) => (
+              <li key={riga} className="membro-riga">
+                <span className="membro-skeleton-avatar" />
+                <span className="membro-skeleton-nome" />
+              </li>
+            ))}
+          </ul>
+        ) : membri.length > 0 ? (
           <ul className="lista-membri-famiglia">
             {membri.map((m) => (
               <li key={m.id} className="membro-riga">
@@ -136,7 +147,7 @@ export default function Profilo() {
               </li>
             ))}
           </ul>
-        )}
+        ) : null}
 
         <button
           className="bottone-secondario bottone-icona"

@@ -1459,6 +1459,42 @@ button:active {
   transform: translateX(3px);
 }
 
+.lista-membri-caricamento .membro-riga:hover {
+  transform: none;
+}
+
+.membro-skeleton-avatar,
+.membro-skeleton-nome {
+  display: block;
+  border-radius: 999px;
+  background: linear-gradient(100deg, #edf0f6 20%, #f8f9fc 45%, #edf0f6 70%);
+  background-size: 220% 100%;
+  animation: membro-skeleton 1.2s ease-in-out infinite;
+}
+
+.membro-skeleton-avatar {
+  width: 36px;
+  height: 36px;
+  flex: 0 0 36px;
+}
+
+.membro-skeleton-nome {
+  width: min(48%, 150px);
+  height: 13px;
+}
+
+.lista-membri-famiglia:not(.lista-membri-caricamento) .membro-riga {
+  animation: membro-entra 0.3s ease both;
+}
+
+.lista-membri-famiglia:not(.lista-membri-caricamento) .membro-riga:nth-child(2) {
+  animation-delay: 0.06s;
+}
+
+.lista-membri-famiglia:not(.lista-membri-caricamento) .membro-riga:nth-child(3) {
+  animation-delay: 0.12s;
+}
+
 .avatar-piccolo {
   box-shadow: none;
 }
@@ -1684,21 +1720,48 @@ button:active {
   font-size: 14px;
   font-weight: 500;
   text-align: left;
+  transition: color 0.2s ease, border-color 0.2s ease, background 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
 }
 
 .campo-data svg:first-child {
   color: var(--primario);
+  transition: color 0.2s ease, transform 0.2s ease;
 }
 
-.campo-data svg:last-child {
+.campo-data .campo-data-orologio {
   margin-left: auto;
   color: #94a3b8;
+  transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.campo-data:hover,
+.campo-data:focus-visible {
+  border-color: #a5b4fc;
+  background: #f4f5ff;
+  box-shadow: 0 5px 12px rgba(99, 102, 241, 0.1);
+  color: var(--primario-scuro);
+  outline: none;
+  transform: translateY(-1px);
+}
+
+.campo-data:hover svg,
+.campo-data:focus-visible svg {
+  color: var(--primario-scuro);
+}
+
+.campo-data:hover svg:first-child {
+  transform: scale(1.08);
 }
 
 .campo-data.compilato {
   border-color: #c7d2fe;
   color: #3e4b62;
   font-weight: 650;
+}
+
+.campo-data.compilato:hover,
+.campo-data.compilato:focus-visible {
+  color: var(--primario-scuro);
 }
 
 .modal-data-overlay {
@@ -1709,9 +1772,11 @@ button:active {
   max-width: 420px;
   padding: 0;
   overflow: hidden;
+  border: 0;
 }
 
 .modal-data-intestazione {
+  position: relative;
   display: flex;
   flex-direction: column;
   gap: 4px;
@@ -1726,6 +1791,28 @@ button:active {
   color: white;
   font-size: 24px;
   letter-spacing: -0.6px;
+}
+
+.modal-data-chiudi {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  display: grid;
+  width: 34px;
+  min-height: 34px;
+  padding: 0;
+  place-items: center;
+  border: 1px solid rgba(255, 255, 255, 0.32);
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.14);
+  box-shadow: none;
+  color: white;
+}
+
+.modal-data-chiudi:hover {
+  border-color: rgba(255, 255, 255, 0.5);
+  background: rgba(255, 255, 255, 0.26);
+  box-shadow: none;
 }
 
 .calendario-navigazione {
@@ -1856,15 +1943,28 @@ button:active {
   to { transform: rotate(360deg); }
 }
 
+@keyframes membro-skeleton {
+  to { background-position: -220% 0; }
+}
+
+@keyframes membro-entra {
+  from { opacity: 0; transform: translateY(5px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .caricamento-pagina,
   .caricamento-rotella,
-  .in-rotazione {
+  .in-rotazione,
+  .membro-skeleton-avatar,
+  .membro-skeleton-nome,
+  .lista-membri-famiglia:not(.lista-membri-caricamento) .membro-riga {
     animation: none;
   }
 
   .pull-refresh,
-  .campo-data {
+  .campo-data,
+  .campo-data svg {
     transition: none;
   }
 }
