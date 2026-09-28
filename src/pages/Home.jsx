@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { ArrowUpRight, CalendarDays, ListTodo, ShoppingCart, Sparkles, Trophy } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../lib/AuthContext';
+import { dataLocale } from '../lib/date';
 
 export default function Home() {
   const { profilo } = useAuth();
@@ -42,7 +43,7 @@ export default function Home() {
   }
 
   async function caricaFaccendeUrgenti() {
-    const oggi = new Date().toISOString().slice(0, 10);
+    const oggi = dataLocale();
     const { data } = await supabase
       .from('faccende')
       .select('*')
@@ -106,7 +107,7 @@ export default function Home() {
 
   const primaFaccenda = faccendeUrgenti[0];
   const prossimoAppuntamento = prossimiAppuntamenti[0];
-  const oggi = new Date().toISOString().slice(0, 10);
+  const oggi = dataLocale();
   const riepilogoOggi = primaFaccenda
     ? {
         link: '/faccende',

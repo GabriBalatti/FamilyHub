@@ -35,6 +35,8 @@ export default function Calendario() {
   }, []);
 
   async function caricaAppuntamenti() {
+    const inizioGiornata = new Date();
+    inizioGiornata.setHours(0, 0, 0, 0);   
     const { data } = await supabase
       .from('appuntamenti')
       .select('*')
