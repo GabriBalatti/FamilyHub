@@ -1251,11 +1251,16 @@ button:active {
   border-radius: 5px;
 }
 
-.chip input[type='radio']:checked,
-.chip input[type='checkbox']:checked {
+.chip input[type='radio']:checked {
   border-color: var(--primario);
   background: var(--primario);
   box-shadow: inset 0 0 0 3px white;
+}
+
+.chip input[type='checkbox']:checked {
+  border-color: transparent;
+  background: var(--primario);
+  box-shadow: none;
 }
 
 .lista-elementi {
@@ -1288,7 +1293,10 @@ button:active {
 }
 
 .lista-elementi input[type='checkbox'] {
+  border: 0;
   border-radius: 7px;
+  outline: none;
+  box-shadow: none;
 }
 
 .titolo {

@@ -31,7 +31,7 @@ function testoData(valore, includeOra) {
   return includeOra ? `${giorno}, ${data.toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' })}` : giorno;
 }
 
-export default function SelettoreDataOra({ value, onChange, includeOra = false, obbligatorio = false }) {
+export default function SelettoreDataOra({ value, onChange, includeOra = false }) {
   const [aperto, setAperto] = useState(false);
   const [selezione, setSelezione] = useState(() => dataDaValore(value, includeOra));
   const [meseVisibile, setMeseVisibile] = useState(() => new Date(selezione.getFullYear(), selezione.getMonth(), 1));
@@ -122,7 +122,6 @@ export default function SelettoreDataOra({ value, onChange, includeOra = false, 
               )}
 
               <div className="modal-azioni modal-data-azioni">
-                {!obbligatorio && <button type="button" className="bottone-secondario" onClick={() => { onChange(''); setAperto(false); }}>Rimuovi</button>}
                 <button type="button" onClick={() => { onChange(valoreData(selezione, includeOra)); setAperto(false); }}>Conferma</button>
               </div>
             </div>

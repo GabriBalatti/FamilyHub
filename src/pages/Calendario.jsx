@@ -112,7 +112,7 @@ export default function Calendario() {
         </label>
         <label className="campo-label">
           Data e ora*
-          <SelettoreDataOra value={dataInizio} onChange={setDataInizio} includeOra obbligatorio />
+          <SelettoreDataOra value={dataInizio} onChange={setDataInizio} includeOra />
         </label>
         <label className="campo-label">
           Luogo

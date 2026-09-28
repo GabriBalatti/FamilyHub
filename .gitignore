@@ -1,5 +1,6 @@
 # Editor e configurazioni locali
 .vscode/
+.freebuff
 
 # Dipendenze e build
 node_modules

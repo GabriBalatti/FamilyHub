@@ -5,25 +5,27 @@ export function useBloccaScroll(attivo = true) {
   useLayoutEffect(() => {
     if (!attivo) return undefined;
 
-    const posizioneScroll = window.scrollY;
     const stilePrecedente = {
-      overflow: document.body.style.overflow,
-      position: document.body.style.position,
-      top: document.body.style.top,
-      width: document.body.style.width
+      overflowBody: document.body.style.overflow,
+      overflowHtml: document.documentElement.style.overflow,
+      overscrollBehavior: document.body.style.overscrollBehavior,
+      paddingRight: document.body.style.paddingRight
     };
+    const larghezzaBarra = window.innerWidth - document.documentElement.clientWidth;
 
     document.body.style.overflow = 'hidden';
-    document.body.style.position = 'fixed';
-    document.body.style.top = `-${posizioneScroll}px`;
-    document.body.style.width = '100%';
+    document.documentElement.style.overflow = 'hidden';
+    document.body.style.overscrollBehavior = 'none';
+    if (larghezzaBarra > 0) {
+      const paddingAttuale = Number.parseFloat(window.getComputedStyle(document.body).paddingRight) || 0;
+      document.body.style.paddingRight = `${paddingAttuale + larghezzaBarra}px`;
+    }
 
     return () => {
-      document.body.style.overflow = stilePrecedente.overflow;
-      document.body.style.position = stilePrecedente.position;
-      document.body.style.top = stilePrecedente.top;
-      document.body.style.width = stilePrecedente.width;
-      window.scrollTo(0, posizioneScroll);
+      document.body.style.overflow = stilePrecedente.overflowBody;
+      document.documentElement.style.overflow = stilePrecedente.overflowHtml;
+      document.body.style.overscrollBehavior = stilePrecedente.overscrollBehavior;
+      document.body.style.paddingRight = stilePrecedente.paddingRight;
     };
   }, [attivo]);
 }
