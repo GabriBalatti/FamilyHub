@@ -17,7 +17,7 @@ self.addEventListener('push', (event) => {
   const opzioni = {
     body: dati.corpo || '',
     icon: '/icon-192.png',
-    badge: '/icon-192.png',
+    badge: '/badge-96.png', // silhouette bianca su trasparente (Android)
     data: { url: dati.url || '/' }
   };
   event.waitUntil(self.registration.showNotification(titolo, opzioni));

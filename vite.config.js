@@ -12,8 +12,16 @@ export default defineConfig({
       strategies: 'injectManifest',
       srcDir: 'src',
       filename: 'sw.js',
-      includeAssets: ['favicon.ico', 'icon-192.png', 'icon-512.png'],
-      
+      includeAssets: [
+        'favicon.ico',
+        'icon.svg',
+        'apple-touch-icon.png',
+        'icon-192.png',
+        'icon-512.png',
+        'icon-maskable-512.png',
+        'badge-96.png'
+      ],
+
       // Inietta l'aggiornamento automatico nei precache
       injectManifest: {
         globPatterns: ['**/*.{js,css,html,ico,png,svg}'],
@@ -38,6 +46,12 @@ export default defineConfig({
             src: 'icon-512.png',
             sizes: '512x512',
             type: 'image/png'
+          },
+          {
+            src: 'icon-maskable-512.png',
+            sizes: '512x512',
+            type: 'image/png',
+            purpose: 'maskable'
           }
         ]
       }

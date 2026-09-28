@@ -1,4 +1,8 @@
-# ![Logo](public/favicon.ico) FamilyHub
+<p align="center">
+  <img src="public/icon-192.png" width="96" alt="Logo FamilyHub">
+</p>
+
+<h1 align="center">FamilyHub</h1>
 
 PWA per organizzare faccende domestiche, lista della spesa e appuntamenti familiari, con sincronizzazione in tempo reale, notifiche push e un sistema di inviti via link, codice o QR code per far entrare subito tutta la famiglia.
 
@@ -16,6 +20,14 @@ Ambienti separati: branch `main` → produzione, branch `staging` → staging, c
 
 ```
 FamilyHub/
+├── public/                          # Asset statici (vedi sezione "Icone e branding")
+│   ├── favicon.ico                  # Favicon multi-size (16/32/48)
+│   ├── icon.svg                     # Sorgente vettoriale del logo
+│   ├── icon-192.png                 # Icona PWA e icona delle notifiche push
+│   ├── icon-512.png                 # Icona PWA (splash Android)
+│   ├── icon-maskable-512.png        # Icona adattiva Android (a tutto campo)
+│   ├── apple-touch-icon.png         # Icona iOS (180×180)
+│   └── badge-96.png                 # Badge delle notifiche Android (silhouette)
 ├── supabase/
 │   ├── schema.sql                  # Schema iniziale (solo tabelle base — vedi nota sotto)
 │   ├── config.toml                 # Config CLI Supabase
@@ -34,7 +46,8 @@ FamilyHub/
 │   │   ├── 2.8_elimina_profilo.sql.sql            # RLS: un utente può eliminare il proprio profilo
 │   │   ├── 2.9_cascade_eliminazione_profilo.sql   # created_by/aggiunto_da → null invece di bloccare la delete
 │   │   ├── 3.0_trigger_uscita_famiglia.sql        # Notifica anche quando un membro abbandona la famiglia
-│   │   └── 3.1_realtime_profili.sql               # profili in supabase_realtime (membri live)
+│   │   ├── 3.1_realtime_profili.sql               # profili in supabase_realtime (membri live)
+│   │   └── 3.2_completamento_faccende.sql         # Colonna completata_il + trigger (contatore "Settimana" della Home)
 │   └── functions/                   # Edge Function (Deno), deploy via Supabase CLI
 │       ├── _shared/webpush.ts       # Invio Web Push condiviso: timeout per invio + pulizia sottoscrizioni scadute
 │       ├── notify-nuovo-utente/      # Entrata E uscita da una famiglia
@@ -47,12 +60,15 @@ FamilyHub/
 │   │   ├── AuthContext.jsx          # Gestione sessione utente e profilo
 │   │   ├── famiglie.js              # trovaFamigliaDaCodice() — helper condiviso da setup e inviti
 │   │   ├── pushNotifications.js     # Sottoscrizione push lato client
+│   │   ├── date.js                  # dataLocale(): "oggi" in ora di Roma (YYYY-MM-DD)
+│   │   ├── useBloccaScroll.js       # Blocca lo scroll della pagina dietro ai modal (anche Safari iOS)
 │   │   └── version.js               # Versione app, letta da package.json
 │   ├── pages/
 │   │   ├── Login.jsx
 │   │   ├── SetupFamiglia.jsx        # Crea famiglia, o entra con codice / scanner QR
 │   │   ├── UnisciFamigliaInvito.jsx # Onboarding da link/QR per chi non ha ancora un profilo
 │   │   ├── GestisciInvito.jsx       # Gestisce un link/QR aperto da chi è già in una famiglia
+│   │   ├── Home.jsx                 # Riepilogo: quattro card e riquadro "Oggi in famiglia"
 │   │   ├── Faccende.jsx
 │   │   ├── Spesa.jsx
 │   │   ├── Calendario.jsx
@@ -62,7 +78,10 @@ FamilyHub/
 │   │   ├── ConfermaModal.jsx        # Modal riutilizzabile per le conferme (anche in variante "pericolosa")
 │   │   ├── AvvisoModal.jsx          # Modal riutilizzabile puramente informativo
 │   │   ├── InvitaModal.jsx          # Codice, link dinamico, QR code, copia e condivisione
-│   │   └── ScannerQR.jsx            # Scansione QR da fotocamera, usata in SetupFamiglia
+│   │   ├── ScannerQR.jsx            # Scansione QR da fotocamera, usata in SetupFamiglia
+│   │   ├── SelettoreDataOra.jsx     # Selettore data (e ora) personalizzato, usato in Faccende e Calendario
+│   │   ├── ModalPortal.jsx          # Rende i modal figli diretti di body (evita limiti di transform su mobile)
+│   │   └── PullToRefresh.jsx        # Gesto "trascina per aggiornare" per la PWA installata
 │   ├── styles/
 │   │   └── global.css
 │   ├── sw.js                         # Service worker personalizzato (eventi push + notificationclick)
@@ -70,24 +89,51 @@ FamilyHub/
 │   └── main.jsx
 ├── index.html
 ├── vite.config.js                    # Config Vite + PWA (strategia injectManifest)
-├── vercel.json                       # Rewrite SPA — necessario perché il tap su una notifica apra le pagine interne
+├── vercel.json                       # Rewrite SPA + no-cache su sw.js e index.html
 ├── package.json
 └── package-lock.json
 ```
 
 > **Nota su `schema.sql`**: contiene solo lo schema iniziale (famiglie, profili, faccende, liste/elementi spesa, appuntamenti). Non è più "lo schema completo": tabelle, funzioni e trigger delle notifiche e degli inviti vivono nelle migrazioni `2.x` e `3.x`. Per creare un ambiente da zero servono `schema.sql` **e** tutte le migrazioni in `Migrations/` eseguite in ordine numerico.
->
-> Il file `2.1_creazione_edge_function_(clode).txt` è vuoto — un residuo della numerazione, sicuro da cancellare.
+
+## Icone e branding
+
+Il logo è l'icona `HouseHeart` di [Lucide](https://lucide.dev) (la stessa della schermata di login), in bianco su un riquadro con gradiente indaco (`#818cf8` → `#4f46e5`, in linea con `--primario`). Tutti i file in `public/` derivano dallo stesso disegno:
+
+| File | Dimensione | Dove viene usato |
+|---|---|---|
+| `favicon.ico` | 16/32/48 | Tab del browser |
+| `icon.svg` | vettoriale | Favicon dei browser moderni, logo nel README |
+| `icon-192.png` | 192×192 | Manifest PWA, icona delle notifiche push (`sw.js`) |
+| `icon-512.png` | 512×512 | Manifest PWA, splash Android |
+| `icon-maskable-512.png` | 512×512 | Icona adattiva Android (`purpose: maskable`): a tutto campo, con il glifo nella safe zone centrale |
+| `apple-touch-icon.png` | 180×180 | Icona sulla schermata Home di iOS (a tutto campo: iOS arrotonda da solo) |
+| `badge-96.png` | 96×96 | Badge delle notifiche Android: silhouette bianca su sfondo trasparente |
+
+Per cambiare il logo basta sostituire questi file mantenendo nomi e dimensioni: nessun riferimento nel codice da toccare. `index.html` usa il suffisso `?v=2` su favicon e apple-touch-icon per forzare i browser a scaricare la nuova versione: alzalo (`?v=3`, …) a ogni cambio di logo.
+
+> **Aggiornamento su dispositivi già in uso**: Android aggiorna l'icona della PWA da solo dopo un po'; su iOS l'icona di una PWA già installata non cambia, va rimossa e ricreata da Condividi → Aggiungi alla schermata Home.
 
 ## Come funziona il modello dati
 
 - **famiglie**: ogni nucleo familiare ha un record con un `codice_invito` univoco
 - **profili**: collegato a `auth.users`, ogni persona appartiene a una famiglia (`famiglia_id`)
 - **faccende**, **liste_spesa/elementi_spesa**, **appuntamenti**: tutto filtrato per `famiglia_id`
+- **faccende.completata_il**: timestamp di completamento, gestito da un trigger (migration 3.2) — si azzera se la faccenda viene riaperta
 - **push_subscriptions**: una riga per dispositivo/browser con le notifiche attive, legata a `profilo_id`
 - **notifiche_log**: traccia i promemoria già inviati, per evitare invii duplicati quando il controllo schedulato gira più volte
 - **Row Level Security**: ogni utente vede/modifica solo i dati della propria famiglia (o le proprie sottoscrizioni/notifiche)
 - **Realtime**: le tabelle principali — inclusa `profili`, dalla migration 3.1 — sono in `supabase_realtime`, quindi ogni modifica (anche l'ingresso o l'uscita di un membro) si propaga istantaneamente a tutti i dispositivi connessi
+
+## Home
+
+La schermata **Home** è il riepilogo della famiglia, aggiornato in tempo reale tramite il canale Realtime `home-canale` (faccende, appuntamenti, spesa, membri). Mostra:
+
+- il saluto e gli avatar dei membri (se sono più di uno);
+- quattro card, ognuna un link alla sezione corrispondente: **Faccende** (le *tue* faccende scadute o in scadenza oggi), **Prossimo** (il primo appuntamento futuro), **Spesa** (articoli ancora da comprare) e **Settimana** (faccende completate da lunedì, grazie a `completata_il`);
+- il riquadro **Oggi in famiglia**, che mostra una sola frase e porta alla sezione più rilevante, scelta con una cascata di priorità: faccende urgenti → prossimo appuntamento → articoli in lista → messaggio "Tutto in ordine".
+
+Le date di riferimento ("oggi", inizio giornata) sono calcolate in **ora di Roma** con `dataLocale()` (`src/lib/date.js`), coerentemente con `data_locale()` usata dalle Edge Function: così Home e notifiche concordano sempre, anche vicino alla mezzanotte.
 
 ## Sistema di notifiche push
 
